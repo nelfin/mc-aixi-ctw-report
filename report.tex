@@ -7,7 +7,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage{times}
+\usepackage{palatino}
 \newcommand{\hs}{$\hspace{0.5cm}$}
 \newcommand{\bt}{\begin{tabbing}}
 \newcommand{\et}{\end{tabbing}}
@@ -69,6 +69,7 @@
 \chapter{Description of the MC-AIXI-CTW implementation}
 
 \chapter{User Manual}
+\section*{Arguments}
 The agent can be compile with the \texttt{make} command. The agent then can then be run using\\
 
 \texttt{./main <environment> <logfile>}\\
@@ -85,6 +86,39 @@ The agent can be compile with the \texttt{make} command. The agent then can then
 \end{itemize}
 \newline
 \texttt{<logfile>} is an optional argument, which specifies the name of a log file to output results to.
-
+\newline
+\section*{Configuration files}
+\texttt{.conf} files are \emph{configuration files}, specifying which environment is to be used, and relevant parameters for each environment. Each configuration file has the following parameters
+\begin{itemize}
+\item \texttt{environment}: The name of the environment to use. One of \{4x4-grid, kuhn-poker, tiger, biased-rock-paper-scissor, pacman, composite\}.
+\item \texttt{exploration}: The rate at which the agent explores, by making random decisions.
+\item \texttt{explore-decay }: The rate at the exploration rate decreases
+\end{itemize}
+In addition to this, some configurations have parameters that are specific to their environments.
+\begin{itemize}
+\item Coinflip
+    \begin{itemize}
+        \item \texttt{coin-flip-p}: The probability of a flipping heads (0 $\leq$ \texttt{coin-flip-p}  $\leq$ 1).
+    \end{itemize}
+\item Kuhn poker
+    \begin{itemize}
+        \item \texttt{gamma}: A constant that determines the environment's Nash equilibrium strategy. (0 $\leq$ \texttt{gamma}  $\leq$ 1)
+    \end{itemize}
+\item Pacman
+    \begin{itemize}
+        \item \texttt{mapfile}: The location of the map file for the pacman board.
+    \end{itemize}
+\item tiger.conf
+    \begin{itemize}
+        \item \texttt{left-door-p}: The probability that the gold is behind the left door
+        \item \texttt{listen-p}: The probability that a listening observation is correct.
+    \end{itemize}
+\item composite.conf
+    \begin{itemize}
+        \item \texttt{environmentN}: Specifies the $N^{\text{th}}$ environment, where $0 \leq N \leq 10$. The value of this parameter is an integer $\leq 10$, and indicates which environment environmentN represents.
+        \item \texttt{startN}: Specifies the time step that at which the $N^{\text{th}}$ environment starts, where $0 \leq N \leq 10$.
+        \item Paremeters required for the environemnts $1..N$ specified in \texttt{environment.cpp}.
+    \end{itemize}
+\end{itemize}
 \chapter{Results}
 \end{document}
