@@ -8,6 +8,8 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage[sc]{mathpazo}
+\usepackage[round]{natbib}
+
 \newcommand{\hs}{$\hspace{0.5cm}$}
 \newcommand{\bt}{\begin{tabbing}}
 \newcommand{\et}{\end{tabbing}}
@@ -79,8 +81,22 @@
 \end{titlepage}
 \chapter{Description of the MC-AIXI-CTW implementation}
 
+The AIXI agent is a formal, mathematical agent which represents a solution to
+the general reinforcement learning problem. Principally, AIXI consists of an
+expectimax search over a Bayesian mixture of Turing machines in order to
+choose optimal actions by predicting future observations and rewards based on
+past experience. Given infinite computational resources, AIXI represents the
+optimal reinforcement agent: maximising future expected reward in any unknown
+environment.
+
+In the far more limited world of what is tractable, we require an
+approximation to AIXI. Here, we approximate AIXI via a combination of UCT
+search (Monte-Carlo Tree Search with the Upper Confidence Bound)
+\citep{kocsis2006bandit} and Context Tree Weighting
+\citep{willems1995context}, yielding MC-AIXI-CTW.
+
 \chapter{User Manual}
-\section*{Arguments}
+\section{Arguments}
 The agent can be compile with the \texttt{make} command. The agent then can then be run using\\
 
 \texttt{./main <environment> <logfile>}\\
@@ -97,7 +113,7 @@ The agent can be compile with the \texttt{make} command. The agent then can then
 \end{itemize}
 \texttt{<logfile>} is an optional argument, which specifies the name of a log file to output results to.
 \newline
-\section*{Configuration files}
+\section{Configuration files}
 \texttt{.conf} files are \emph{configuration files}, specifying which environment is to be used, and relevant parameters for each environment. Each configuration file has the following parameters
 \begin{itemize}
 \item \texttt{environment}: The name of the environment to use. One of \{4x4-grid, kuhn-poker, tiger, biased-rock-paper-scissor, pacman, composite\}.
@@ -130,5 +146,19 @@ In addition to this, some configurations have parameters that are specific to th
         \item Paremeters required for the environemnts $1..N$ specified in \texttt{environment.cpp}.
     \end{itemize}
 \end{itemize}
+
 \chapter{Results}
+
+\section{Experimentation}
+\label{sec:Experimentation}
+
+\section{Learning}
+\label{sec:Learning}
+
+\section{Extension}
+\label{sec:Extension}
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
 \end{document}
