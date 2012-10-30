@@ -8,11 +8,14 @@
 #          cycle,average_reward
 #
 # which can then be passed to PGFPlots.
+# Argument 1 = in
+# Argument 2 = out
 
 import csv
+import sys
 
-f = open('log.csv', 'r')
-out = open('plot.csv', 'w')
+f = open(sys.argv[1], 'r')
+out = open(sys.argv[2], 'w')
 reader = csv.reader(f)
 
 out.write("# ")
