@@ -343,10 +343,10 @@ The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We
 \section{Coin flip results}
 Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is 1 with probability $\theta \in [0,1]$, else the reward is 0. For a regular coin, $\theta = 0.5$, and there is no dominant strategy. However, if $\theta \not = 0.5$, dominant strategies emerge ($\theta > 0.5 \Rightarrow $ predict 1, $\; \theta < 0.5 \Rightarrow $ predict 0). The variable $\theta$ is hidden from the agent.
 
-\begin{figure}
+\begin{figure}[h]
   \begin{center}
     \begin{tikzpicture}
-      \begin{axis}[smooth,/pgfplots/no markers,legend style={
+      \begin{axis}[xlabel=Cycle,ylabel=Average reward,smooth,/pgfplots/no markers,legend style={
                                                cells={anchor=east},
                                                legend pos=outer north east,
                                                }]
@@ -374,6 +374,19 @@ exploration & 0.01\\
 explore-decay & 0.999\\
 \hline
 \end{tabular}
+
+\begin{figure}[h]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+        \addplot table {graph_data/tiger.plot.csv};
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  \caption{Tiger results}
+  \label{fig:tiger_results}
+\end{figure}
+
 \section{Grid world results}
 
 \begin{tabular}{| r | l | }
