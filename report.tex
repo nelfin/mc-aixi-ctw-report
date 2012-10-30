@@ -343,64 +343,102 @@ The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We
 
 \section{Coin flip results}
 Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is 1 with probability $\theta \in [0,1]$, else the reward is 0. For a regular coin, $\theta = 0.5$, and there is no dominant strategy. However, if $\theta \not = 0.5$, dominant strategies emerge ($\theta > 0.5 \Rightarrow $ predict 1, $\; \theta < 0.5 \Rightarrow $ predict 0). The variable $\theta$ is hidden from the agent.
-
-\begin{figure}[h]
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{axis}[xlabel=Cycle,ylabel=Average reward,smooth,/pgfplots/no markers,legend style={
-                                               cells={anchor=east},
-                                               legend pos=outer north east,
-                                               }]
-        \foreach \p in {0, 2, 4, 6, 8} {
-        \addplot table {graph_data/coinflip_p=0_\p.plot.csv};
-        \addlegendentryexpanded{$p = 0.\p$};
-        }
-        \addplot table {graph_data/coinflip_p=1_0.plot.csv};
-        \addlegendentry{$p = 1.0$};
-      \end{axis}
-    \end{tikzpicture}
-  \end{center}
-  \caption{Coin flip results}
-  \label{fig:coinflip_results}
+\section{Coin flip results}
+294	 300	
+ Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is 1 with probability $\theta \in [0,1]$, else the reward is 0. For a regular coin, $\theta = 0.5$, and there is no dominant strategy. However, if $\theta \not = 0.5$, dominant strategies emerge ($\theta > 0.5 \Rightarrow $ predict 1, $\; \theta < 0.5 \Rightarrow $ predict 0). The variable $\theta$ is hidden from the agent.
+\begin{figure}
+\centering
+ \begin{tikzpicture}
+    \begin{axis}[xlabel=Cycle,ylabel=Average reward,title={Coinflip $\theta=0.2$}]
+      \pgfplotstableread{graph_data/coinflip_p=0_2.plot.csv}\plotcsv
+      \addplot+[every mark/.append style={no markers},smooth] table
+      {\plotcsv};
+    \end{axis}
+  \end{tikzpicture}
+\caption{Coinflip simulation for $\theta=0.2$}
+\label{fig:coin_0_2}
 \end{figure}
-Another graph with $\theta = 1$ is shown in Figure \ref{fig:coin_1_0}. With $\theta = 1$, the maximum theoretical reward is $1$, with the strategy of picking 1 always. We can see that our implementation of \mac{} quickly converges to this strategy of picking 1 always, with the average reward approaching 1 (the maximum possible reward).
-
+	
+\ref{fig:coin_0_2} shows the results for $\theta=0.2$. The theoretical best strategy for this environment would be to predict $0$ always, and gain a reward of $0.8$. We can see that our implementation of \mac{} acheives better than a random player (who would receive an average reward of 0.5) but does not acheive the maximum theoretical average reward in 8000 cycles.
+ 
+% \begin{figure}[h]
+%   \begin{center}
+%     \begin{tikzpicture}
+%       \begin{axis}[xlabel=Cycle,ylabel=Average reward,smooth,/pgfplots/no markers,legend style={
+%                                                cells={anchor=east},
+%                                                legend pos=outer north east,
+%                                                }]
+%         \foreach \p in {0, 2, 4, 6, 8} {
+%         \addplot table {graph_data/coinflip_p=0_\p.plot.csv};
+%         \addlegendentryexpanded{$p = 0.\p$};
+%         }
+%         \addplot table {graph_data/coinflip_p=1_0.plot.csv};
+%         \addlegendentry{$p = 1.0$};
+%       \end{axis}
+%     \end{tikzpicture}
+%   \end{center}
+%   \caption{Coin flip results}
+%   \label{fig:coinflip_results}
+% \end{figure}
+Another graph with $\theta = 1$ is shown in Figure XXXX. With $\theta = 1$, the maximum theoretical reward is $1$, with the strategy of picking 1 always. We can see that our implementation of \mac{} quickly converges to this strategy of picking 1 always, with the average reward approaching 1.
+\begin{figure}
+\centering
+ \begin{tikzpicture}
+    \begin{axis}[xlabel=Cycle,ylabel=Average reward,title={Coinflip $\theta=1.0$}]
+      \pgfplotstableread{graph_data/coinflip_p=1_0.plot.csv}\plotcsv
+      \addplot+[every mark/.append style={no markers},smooth] table
+      {\plotcsv};
+    \end{axis}
+  \end{tikzpicture}
+\caption{Coinflip simulation for $\theta=1.0$}
+\label{fig:coin_1_0}
+\end{figure}
 
 \section{Tiger results}
-The parameters used were:\\\\
+Tiger is a game where the agent chooses either two doors. Each door has a 50\% chance to contain a moderate reward of 110, or contain a reward of 0. A reward of 99 is given for listening, which has an 85\% chance to correctly reveal (as an observation) the size of the reward behind the door. This is a non-deterministic environment.\\\\
+\begin{center}
 \begin{tabular}{| r | l | }
 \hline
 mc-simulations & 50\\
+ct-depth & 30\\
+agent-horizon & 4\\
 exploration & 0.01\\
 explore-decay & 0.999\\
 \hline
-\end{tabular}
+\end{tabular}\\
+\vspace{0.5mm}
+Table 4.3: The parameters used in the Tiger environment.
+\end{center}
+The ct-depth was chosen to be 30 so as to be large enough to store several percept and reward sequences. The agent horizon was set to 4 in order to enable optimum play (listen 3 times then choose the door.
 
-\begin{figure}[h]
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
-        \addplot table {graph_data/tiger.plot.csv};
-      \end{axis}
-    \end{tikzpicture}
-  \end{center}
-  \caption{Tiger results}
-  \label{fig:tiger_results}
-\end{figure}
+% \begin{figure}[h]
+%   \begin{center}
+%     \begin{tikzpicture}
+%       \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+%         \addplot table {graph_data/tiger.plot.csv};
+%       \end{axis}
+%     \end{tikzpicture}
+%   \end{center}
+%   \caption{Tiger results}
+%   \label{fig:tiger_results}
+% \end{figure}
+These results 
 
 \section{Grid world results}
-
-\begin{figure}[h]
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
-        \addplot table {graph_data/grid.plot.csv};
-      \end{axis}
-    \end{tikzpicture}
-  \end{center}
-  \caption{Grid world results}
-  \label{fig:grid_results}
-\end{figure}
+Grid world is a world where a blind agent (never given any observation) in a 4x4 grid needs to reach the bottom right corner, which will grant a reward of 1. All other rewards are 0. Moving outside the grid returns the agent back to the nearest square inside the grid. Once reaching the bottom right corner, the agent is teleported to a random other square in the grid. Note that under the specification, the agent may be teleported to the bottom right corne. The agent will not receive extra reward for this, but has an advantage in that either RIGHT or DOWN will result in an immediate reward. The environment is non-deterministic, however, contains an optimal sequence that is guaranteed a reward within 6 moves, namely RIGHT, DOWN repeated 3 times.\\\\
+\begin{center}
+\begin{tabular}{| r | l | }
+\hline
+mc-simulations & 12\\
+ct-depth & 12\\
+agent-horizon & 4\\
+exploration & 0.01\\
+explore-decay & 0.99999\\
+\hline
+\end{tabular}\\
+\vspace{0.5mm}
+Table 4.4: The parameters used in the Grid world environment.
+\end{center}
 
 \begin{tabular}{| r | l | }
 \hline
@@ -409,16 +447,36 @@ exploration & 0.01\\
 explore-decay & 0.99999\\
 \hline
 \end{tabular}
+
+% \begin{figure}[h]
+%   \begin{center}
+%     \begin{tikzpicture}
+%       \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+%         \addplot table {graph_data/grid.plot.csv};
+%       \end{axis}
+%     \end{tikzpicture}
+%   \end{center}
+%   \caption{Grid world results}
+%   \label{fig:grid_results}
+% \end{figure}
+
+
 \section{Biased Rock paper scissors results}
-In Biased Rock Paper Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias.\\\\
+In Biased Rock Paper Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias. The environment is non-deterministic.\\\\
 The parameters used were:\\\\
+\begin{center}
 \begin{tabular}{| r | l | }
 \hline
 mc-simulations & 50\\
+ct-depth & 8\\
+agent-horizon & 3\\
 exploration & 0.1\\
 explore-decay & 0.999\\
 \hline
-\end{tabular}
+\end{tabular}\\
+\vspace{0.5mm}
+Table 4.5: The parameters used in the RPS environment.
+\end{center}
 
 \begin{figure}[h]
   \begin{center}
@@ -433,15 +491,21 @@ explore-decay & 0.999\\
 \end{figure}
 
 \section{Kuhn Poker results}
-In Kuhn Poker, the agent plays against a Nash Equillibruim AI, with gamma set to 0.5. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.\\\\
+In Kuhn Poker, the agent plays against a Nash Equillibruim AI, with gamma set to 0.5. More details about the environment can be found in \cite{kuhn}. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.\\\\
 The parameters used were:\\\\
+\begin{center}
 \begin{tabular}{| r | l | }
 \hline
 mc-simulations & 50\\
+ct-depth & 12\\
+agent-horizon & 2\\
 exploration & 0.01\\
 explore-decay & 0.9999\\
 \hline
-\end{tabular}
+\end{tabular}\\
+\vspace{0.5mm}
+Table 4.6: The parameters used in the Kuhn Poker environment.
+\end{center}
 
 \begin{figure}[h]
   \begin{center}
@@ -456,15 +520,20 @@ explore-decay & 0.9999\\
 \end{figure}
 
 \section{Pacman results}
-In Pacman\\\\
-The parameters used were:\\\\
+In partially observable Pacman, the agent plays in a maze, getting reward for consuming food but losing reward for running into walls and getting eaten by ghosts.\\\\
+\begin{center}
 \begin{tabular}{| r | l | }
 \hline
 mc-simulations & 50\\
+ct-depth & 32\\
+agent-horizon & 4\\
 exploration & 0.01\\
 explore-decay & 0.99999\\
 \hline
-\end{tabular}
+\end{tabular}\\
+\vspace{0.5mm}
+Table 4.7: The parameters used in the Pacman environment.
+\end{center}
 
 \begin{figure}[h]
   \begin{center}
@@ -477,11 +546,6 @@ explore-decay & 0.99999\\
   \caption{Pacman results}
   \label{fig:pacman_results}
 \end{figure}
-
- \begin{center}
-\emph{Table 5.1 Number of problems where complete solutions were found}
-\end{center}
-The parameters used were:
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
