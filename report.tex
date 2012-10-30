@@ -65,18 +65,37 @@
 \end{center}
  
 \end{titlepage}
-\chapter{Description of the MC-AIXI-CTW implementation}
+\chapter{Introduction}
+
+The field of Artificial Intelligence (AI) is involved in the study and
+development of rationally intelligent agents that have been deliberately
+constructed. A recent trend in AI has been moving from agents who attempt to
+optimise their performance in a particular environment towards agents who
+attempt to optimise their performance in a wide range of environments. This
+field of study is known as Artificial General Intelligence. Within this paper,
+we describe an implementation of the AIXI agent from Universal AI
+\citep{hutter2005}.
 
 The AIXI agent is a formal, mathematical agent which represents a solution to
 the general reinforcement learning problem. Principally, AIXI consists of an
 expectimax search over a Bayesian mixture of Turing machines in order to
 choose optimal actions by predicting future observations and rewards based on
-past experience. Given infinite computational resources, AIXI represents the
-optimal reinforcement agent: maximising future expected reward in any unknown
-environment.
+past experience. AIXI interacts with an environment in discrete cycles $k = 1,
+2, \dotsc, m$ by taking an action $a_k$ and receiving an
+observation $o_k$ and reward $r_k$. Then AIXI is formally defined by
+\[
+  a_k := \arg\max_{a_k}\sum_{o_k r_k} \dotsb \max_{a_m} \sum_{o_m r_m} [r_k +
+  \dotsb + r_m] \xi(o_1r_1 \dotsb o_mr_m \mid a_1 \dotsb a_m),
+\]
+where $\xi(x_{1:n} \mid a_{1:n}) = \sum_{\nu\in\mathcal{M}} w_0^\nu
+\nu(x_{1:n} \mid a_{1:n})$ is a mixture environment model, $\mathcal{M}$ is a
+model class of all chronological probability distributions, and $w_0^\nu > 0$
+is a prior weight for each $\nu$ such that $\sum_{\nu\in\mathcal{M}} = 1$.
 
-In the far more limited world of what is tractable, we require an
-approximation to AIXI. Here, we approximate AIXI via a combination of UCT
+Given infinite computational resources, AIXI represents the optimal
+reinforcement agent: maximising future expected reward in any unknown
+environment.  In the far more limited world of what is tractable, we require
+an approximation to AIXI. Here, we approximate AIXI via a combination of UCT
 search (Monte-Carlo Tree Search with the Upper Confidence Bound)
 \citep{kocsis2006bandit} and Context Tree Weighting
 \citep{willems1995context}, yielding MC-AIXI-CTW.
@@ -374,7 +393,7 @@ The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We
  \begin{tikzpicture}
     \begin{axis}[xlabel=Cycle,ylabel=Average reward]
       \pgfplotstableread{graph_data/coinflip_p=0_2.plot.csv}\plotcsv
-      \addplot+[every mark/.append style={no markers},smooth] table
+      \addplot +[mark=none, smooth] table
       {\plotcsv};
     \end{axis}
   \end{tikzpicture}
@@ -409,7 +428,7 @@ Another graph with $\theta = 1$ is shown in Figure \ref{fig:coin_1_0}. With $\th
  \begin{tikzpicture}
     \begin{axis}[xlabel=Cycle,ylabel=Average reward]
       \pgfplotstableread{graph_data/coinflip_p=1_0.plot.csv}\plotcsv
-      \addplot+[every mark/.append style={no markers},smooth] table
+      \addplot +[mark=none, smooth] table
       {\plotcsv};
     \end{axis}
   \end{tikzpicture}
