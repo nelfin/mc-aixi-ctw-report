@@ -383,26 +383,7 @@ The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We
 \end{figure}
 	
 Figure \ref{fig:coin_0_2} shows the results for $\theta=0.2$. The theoretical best strategy for this environment would be to predict $0$ always, and gain a reward of $0.8$. We can see that our implementation of \mac{} acheives better than a random player (who would receive an average reward of 0.5) but does not acheive the maximum theoretical average reward in 8000 cycles.
- 
-% \begin{figure}[h]
-%   \begin{center}
-%     \begin{tikzpicture}
-%       \begin{axis}[xlabel=Cycle,ylabel=Average reward,smooth,/pgfplots/no markers,legend style={
-%                                                cells={anchor=east},
-%                                                legend pos=outer north east,
-%                                                }]
-%         \foreach \p in {0, 2, 4, 6, 8} {
-%         \addplot table {graph_data/coinflip_p=0_\p.plot.csv};
-%         \addlegendentryexpanded{$p = 0.\p$};
-%         }
-%         \addplot table {graph_data/coinflip_p=1_0.plot.csv};
-%         \addlegendentry{$p = 1.0$};
-%       \end{axis}
-%     \end{tikzpicture}
-%   \end{center}
-%   \caption{Coin flip results}
-%   \label{fig:coinflip_results}
-% \end{figure}
+
 Another graph with $\theta = 1$ is shown in Figure \ref{fig:coin_1_0}. With $\theta = 1$, the maximum theoretical reward is $1$, with the strategy of picking 1 always. We can see that our implementation of \mac{} quickly converges to this strategy of picking 1 always, with the average reward approaching 1.
 \begin{figure}
 \centering
@@ -415,6 +396,28 @@ Another graph with $\theta = 1$ is shown in Figure \ref{fig:coin_1_0}. With $\th
   \end{tikzpicture}
 \caption{Coinflip simulation for $\theta=1.0$}
 \label{fig:coin_1_0}
+\end{figure}
+
+We also include in Figure \ref{fig:coinflip_results} a graph of all results for \mac{} with $p$ ranging from 0 to 1 for the interested reader.
+
+\begin{figure}[h]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[xlabel=Cycle,ylabel=Average reward,smooth,/pgfplots/no markers,legend style={
+                                               cells={anchor=east},
+                                               legend pos=outer north east,
+                                               },cycle list name=color list]
+        \foreach \p in {0, 2, 4, 6, 8} {
+          \addplot table {graph_data/coinflip_p=0_\p.plot.csv};
+          \addlegendentryexpanded{$p = 0.\p$};
+        }
+        \addplot table {graph_data/coinflip_p=1_0.plot.csv};
+        \addlegendentry{$p = 1.0$};
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  \caption{Coin flip results}
+  \label{fig:coinflip_results}
 \end{figure}
 
 \section{Tiger results}
@@ -467,7 +470,7 @@ These parameters are chosen such that the agent has enough depth in the CT to st
  \begin{figure}[h]
    \begin{center}
      \begin{tikzpicture}
-       \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+       \begin{axis}[xlabel=Cycles,ylabel near ticks,ylabel=Average reward,smooth,/pgfplots/no markers]
          \addplot table {graph_data/grid.plot.csv};
        \end{axis}
      \end{tikzpicture}
