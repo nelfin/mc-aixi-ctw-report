@@ -241,10 +241,17 @@ Most of the Upper Confidence Tree (UCT) algorithm is implemented in the files \t
 	
 	This object represents a node in the search tree. The \texttt{SearchNodes} form an expectimax tree, alternating between decision and chance nodes. \texttt{SearchNode} contains most of the methods related to traversing this tree, and calculating optimal actions from it.
 	}
+	
+	\item{\texttt{ModelUndo}
+	
+	This object represents a snapshot of an agent's model of the environment at a given time. The agent includes functions to revert its model (the CTW tree) to the time at which the \texttt{ModelUndo} was created. This functionality is necessary in the \texttt{sample} function, as it makes changes to the CTW tree that need to be undone.
+	
+	}
 \end{itemize}
 \subsection{Methods}
-\begin{itemize}
+
 \subsubsection*{\texttt{SearchNode}}
+\begin{itemize}
 	\item{\texttt{selectAction}
 	
 	Determines the next action to play, starting from this search node. \texttt{selectAction} looks through the possible actions it could take from this point, and chooses the action that would yield the best expected score (based on the sampling this node in the \texttt{sample} function). Included in this expected score is the \texttt{ucb\_bound} variable, which gives a bonus to nodes that have not been well explored.
@@ -261,15 +268,32 @@ Most of the Upper Confidence Tree (UCT) algorithm is implemented in the files \t
 	
 	Generates actions randomly, and updates the CTW tree based on them. Used in the first run through of the \texttt{sample} function. 
 	}
+\end{itemize}
+
+\subsubsection{\texttt{ModelUndo}}
+\begin{itemize}
+\item{\texttt{ModelUndo}
+
+	The constructor for a \texttt{ModelUndo} takes the age, reward, history size, and last \texttt{SearchNode} type (chance or decision) of an agent and saves this information. This information is sufficient for an agent to revert itself to the time at which the \texttt{ModeUndo} was made.
+
+}
+
+\item{\texttt{Agent::modelRevert}
+
+	Takes a \texttt{ModelUndo} object and reverts an agent's model to the state it was at when this \texttt{ModelUndo} was taken. It iterates through the history and rewinds objects, actions, and rewards seen, peeling them off the history array, and reverting the CTW tree to reflect this removal of information (performs the reverse of an agent's model update procedure).
+
+}
+\end{itemize}
 \subsubsection{General functions}
+\begin{itemize}
 \item{\texttt{search}
 	
-	The top level function for determining an action based on an agent's state. \texttt{search} forms the search tree as it searches. Using the \texttt{SearchNode::sample} function,
-	}
+	The top level function for determining an action based on an agent's state. \texttt{search} forms the search tree as it searches. Using the \texttt{SearchNode::sample} function, \texttt{search} samples from the root multiple times to form the MCTS (Monte Carlo Tree Search) tree. This function also uses \texttt{ModelUndo} to save an agent before modifying it and it's CTW tree. It can then revert it back to it's previous state before the sampling run took place.
+	
+	After the tree has been explored sufficiently (\texttt{numSimulations}), the best action is determined by taking the maximum expected reward over all of the possible actions. This is best action is the one that search returns.
+}
 	
 \end{itemize}
-\subsubsection{\texttt{ModelUndo}}
-
 
 \chapter{Experimentation}
 \section{Sequence prediction}
@@ -342,7 +366,9 @@ The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We
 \end{figure}
 
 \section{Coin flip results}
-Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is 1 with probability $\theta \in [0,1]$, else the reward is 0. For a regular coin, $\theta = 0.5$, and there is no dominant strategy. However, if $\theta \not = 0.5$, dominant strategies emerge ($\theta > 0.5 \Rightarrow $ predict 1, $\; \theta < 0.5 \Rightarrow $ predict 0). The variable $\theta$ is hidden from the agent.
+
+ Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is 1 with probability $\theta \in [0,1]$, else the reward is 0. For a regular coin, $\theta = 0.5$, and there is no dominant strategy. However, if $\theta \not = 0.5$, dominant strategies emerge ($\theta > 0.5 \Rightarrow $ predict 1, $\; \theta < 0.5 \Rightarrow $ predict 0). The variable $\theta$ is hidden from the agent.
+ 
 \begin{figure}
 \centering
  \begin{tikzpicture}
@@ -356,7 +382,7 @@ Coin flip is a simple environment where the agent is given a reward of 1 for cor
 \label{fig:coin_0_2}
 \end{figure}
 	
-\ref{fig:coin_0_2} shows the results for $\theta=0.2$. The theoretical best strategy for this environment would be to predict $0$ always, and gain a reward of $0.8$. We can see that our implementation of \mac{} acheives better than a random player (who would receive an average reward of 0.5) but does not acheive the maximum theoretical average reward in 8000 cycles.
+Figure \ref{fig:coin_0_2} shows the results for $\theta=0.2$. The theoretical best strategy for this environment would be to predict $0$ always, and gain a reward of $0.8$. We can see that our implementation of \mac{} acheives better than a random player (who would receive an average reward of 0.5) but does not acheive the maximum theoretical average reward in 8000 cycles.
  
 % \begin{figure}[h]
 %   \begin{center}
