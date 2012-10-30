@@ -142,13 +142,37 @@ In addition to this, some configurations have parameters that are specific to th
 \chapter{Experimentation}
 \label{sec:Experimentation}
 
-\section{Learning}
-\label{sec:Learning}
-\subsection{Sequence prediction}
-The CTW tree is the primarmy prediction mechanism in the \mac{} model. The CTW implementation of \mac{} was tested in isolation from the rest of the agent on a range of deterministic and non-deterministic sequence.
+\section{Sequence prediction}
+\label{sec:Sequence prediction}
+The CTW tree is the primarmy prediction mechanism in the \mac{} model. The CTW implementation of \mac{} was tested in isolation from the rest of the agent on a range of deterministic and non-deterministic sequence. This was useful for debugging purposes, and the results are an interesting biproduct of \mac{}.
+\subsection{Deterministic sequence prediction}
 
-\section{Extension}
-\label{sec:Extension}
+\subsection{Non deterministic sequence prediction}
+A partially non deterministic sequence was given to CTW for testing purposes. The sequence was given to CTW was of the form\\
+\[
+S := x^{\text{obs}}_0,\; x^{\text{rew}}_0,\; x^{\text{act}}_1,\; x^{\text{obs}}_1,\; x^{\text{rew}}_1, x^{\text{act}}_2,\; x^{\text{obs}}_2,\; x^{\text{rew}}_2, ...
+\]
+Where\\
+\[
+x^{\text{act}}_i := r_{\text{act}}, \;\;\;\; x^{\text{obs}}_i := r_{\text{obs}}, \;\;\;\; \text{and} \;\;\;\;
+x^{\text{rew}}_i :=
+\begin{cases}
+0 & \text{if } x^{\text{obs}}_i = x^{\text{act}}_i\\
+1 & \text{if } x^{\text{obs}}_i \not= x^{\text{act}}_i
+\end{cases}
+\]
+Where\\
+\[
+r_\text{act}, r_\text{obs} \text{ are random bits }
+\]
+\section{Coin flip results}
+\section{Tiger results}
+\section{Grid world results}
+\section{Rock paper scissors results}
+\section{Kuhn poker results}
+\section{Pacman results}
+\chapter{Extension}
+\label{chap:Extension}
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
