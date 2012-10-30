@@ -346,6 +346,8 @@ Figure XXXX shows the agent's performance over a range of $\theta$ values after 
 \begin{tabular}[H]{| r | l | }
 \hline
 mc-simulations & 50\\
+ct-depth & 4\\
+agent-horizon & 16\\
 exploration & 0.1\\
 explore-decay & 0.8\\
 \hline
@@ -353,53 +355,83 @@ explore-decay & 0.8\\
 \caption{The parameters used in the coinflip environment}
 \end{table}
 \section{Tiger results}
-The parameters used were:\\\\
+Tiger is a game where the agent chooses either two doors. Each door has a 50\% chance to contain a moderate reward of 110, or contain a reward of 0. A reward of 99 is given for listening, which has an 85\% chance to correctly reveal (as an observation) the size of the reward behind the door. This is a non-deterministic environment.\\\\
+\begin{center}
 \begin{tabular}{| r | l | }
 \hline
 mc-simulations & 50\\
+ct-depth & 30\\
+agent-horizon & 4\\
 exploration & 0.01\\
 explore-decay & 0.999\\
 \hline
-\end{tabular}
+\end{tabular}\\
+\vspace{0.5mm}
+Table 4.3: The parameters used in the Tiger environment.
+\end{center}
 \section{Grid world results}
-
+Grid world is a world where a blind agent (never given any observation) in a 4x4 grid needs to reach the bottom right corner, which will grant a reward of 1. All other rewards are 0. Moving outside the grid returns the agent back to the nearest square inside the grid. Once reaching the bottom right corner, the agent is teleported to a random other square in the grid. Note that under the specification, the agent may be teleported to the bottom right corne. The agent will not receive extra reward for this, but has an advantage in that either RIGHT or DOWN will result in an immediate reward. The environment is non-deterministic, however, contains an optimal sequence that is guaranteed a reward within 6 moves, namely RIGHT, DOWN repeated 3 times.\\\\
+\begin{center}
 \begin{tabular}{| r | l | }
 \hline
-mc-simulations & 50\\
+mc-simulations & 12\\
+ct-depth & 12\\
+agent-horizon & 4\\
 exploration & 0.01\\
 explore-decay & 0.99999\\
 \hline
-\end{tabular}
+\end{tabular}\\
+\vspace{0.5mm}
+Table 4.6: The parameters used in the Grid world environment.
+\end{center}
 \section{Biased Rock paper scissors results}
-In Biased Rock Paper Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias.\\\\
+In Biased Rock Paper Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias. The environment is non-deterministic.\\\\
 The parameters used were:\\\\
+\begin{center}
 \begin{tabular}{| r | l | }
 \hline
 mc-simulations & 50\\
+ct-depth & 8\\
+agent-horizon & 3\\
 exploration & 0.1\\
 explore-decay & 0.999\\
 \hline
-\end{tabular}
+\end{tabular}\\
+\vspace{0.5mm}
+Table 4.4: The parameters used in the RPS environment.
+\end{center}
 \section{Kuhn Poker results}
-In Kuhn Poker, the agent plays against a Nash Equillibruim AI, with gamma set to 0.5. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.\\\\
+In Kuhn Poker, the agent plays against a Nash Equillibruim AI, with gamma set to 0.5. More details about the environment can be found in \cite{kuhn}. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.\\\\
 The parameters used were:\\\\
+\begin{center}
 \begin{tabular}{| r | l | }
 \hline
 mc-simulations & 50\\
+ct-depth & 12\\
+agent-horizon & 2\\
 exploration & 0.01\\
 explore-decay & 0.9999\\
 \hline
-\end{tabular}
+\end{tabular}\\
+\vspace{0.5mm}
+Table 4.5: The parameters used in the Kuhn Poker environment.
+\end{center}
 \section{Pacman results}
 In Pacman\\\\
 The parameters used were:\\\\
+\begin{center}
 \begin{tabular}{| r | l | }
 \hline
 mc-simulations & 50\\
+ct-depth & 32\\
+agent-horizon & 4\\
 exploration & 0.01\\
 explore-decay & 0.99999\\
 \hline
-\end{tabular}
+\end{tabular}\\
+\vspace{0.5mm}
+Table 4.5: The parameters used in the Pacman environment.
+\end{center}
 
 \chapter{Extension}
 
