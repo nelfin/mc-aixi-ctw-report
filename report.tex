@@ -410,7 +410,7 @@ explore-decay & 0.999\\
 \vspace{0.5mm}
 Table 4.3: The parameters used in the Tiger environment.
 \end{center}
-The ct-depth was chosen to be 30 so as to be large enough to store several percept and reward sequences. The agent horizon was set to 4 in order to enable optimum play (listen 3 times then choose the door.
+The CT depth was chosen to be 30 so as to be large enough to store several percept and reward sequences. The agent horizon was set to 4 in order to enable optimum play (listen 3 times then choose the door.
 
 % \begin{figure}[h]
 %   \begin{center}
@@ -423,14 +423,14 @@ The ct-depth was chosen to be 30 so as to be large enough to store several perce
 %   \caption{Tiger results}
 %   \label{fig:tiger_results}
 % \end{figure}
-These results 
+These results show that the in a steep curve, the agent learns after about 500 cycles that listening is a good idea (as a reward of 99 is better than picking a rarndom door resulting in an average reward of 55). From this point onwards the agent seems to begin to notice the correlation between the percept provided by listen and the reward given by a door, and there is another small spike. The agent has likely had insufficient time to learn, so the reward has not converged, and is still far from the theoretical optimum of 107 average reward.
 
 \section{Grid world results}
 Grid world is a world where a blind agent (never given any observation) in a 4x4 grid needs to reach the bottom right corner, which will grant a reward of 1. All other rewards are 0. Moving outside the grid returns the agent back to the nearest square inside the grid. Once reaching the bottom right corner, the agent is teleported to a random other square in the grid. Note that under the specification, the agent may be teleported to the bottom right corne. The agent will not receive extra reward for this, but has an advantage in that either RIGHT or DOWN will result in an immediate reward. The environment is non-deterministic, however, contains an optimal sequence that is guaranteed a reward within 6 moves, namely RIGHT, DOWN repeated 3 times.\\\\
 \begin{center}
 \begin{tabular}{| r | l | }
 \hline
-mc-simulations & 12\\
+mc-simulations & 50\\
 ct-depth & 12\\
 agent-horizon & 4\\
 exploration & 0.01\\
@@ -440,6 +440,7 @@ explore-decay & 0.99999\\
 \vspace{0.5mm}
 Table 4.4: The parameters used in the Grid world environment.
 \end{center}
+These parameters are chosen such that the agent has enough depth in the CT to store the optimum strategy (depth 12), and will search a reasonable distance in the future (given the small environment).
 
 % \begin{figure}[h]
 %   \begin{center}
@@ -452,9 +453,10 @@ Table 4.4: The parameters used in the Grid world environment.
 %   \caption{Grid world results}
 %   \label{fig:grid_results}
 % \end{figure}
+These results for this experiment are particularly interesting because the graph shows the agent clearly wandering around lost for the first 4000 cycles, but then starting to correctly identify the better strategy, and the reward sharply increases. As shown, the agent strategy has clearly not converged yet and needs more time. The actions taken shows the agent clearly favouring sequences with RIGHT and DOWN, dramatically increasing the average reward.
+
 \section{Biased Rock paper scissors results}
-In Biased Rock Paper Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias. The environment is non-deterministic.\\\\
-The parameters used were:\\\\
+In Biased Rock Paper Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias. The environment is non-deterministic. Note that optimum play on this environment would involve the agent playing scissors until a loss, then playing paper directly afterwards. \\\\
 \begin{center}
 \begin{tabular}{| r | l | }
 \hline
@@ -468,6 +470,7 @@ explore-decay & 0.999\\
 \vspace{0.5mm}
 Table 4.5: The parameters used in the RPS environment.
 \end{center}
+The CT depth is chosen such that 2 observation and reward pairs can be stored, which will enable optimal strategy. The agent horizon is 3 for similar reasoning, slightly longer than the horizon required for optimal strategy, to ensure that the agent isn't immediately unfairly biased towards optimal strategy.
 
 % \begin{figure}[h]
 %   \begin{center}
@@ -480,6 +483,7 @@ Table 4.5: The parameters used in the RPS environment.
 %   \caption{Biased RPS results}
 %   \label{fig:rps_results}
 % \end{figure}
+The results show that the agent is initially thrown off by the curious distribution of the environment, actually performing worse than random. While this may seem odd, it must be kept in mind that the CTW will initially perform poorly for non-deterministic sequence prediction as it can be thrown off by chance. If the agent is at a point where it predicts that scissors is the best move, it is more likely to predict that scissors will be the best next move as well. The problem is that the bias of playing two rocks in a row is quite subtle and will take a while to learn the correct paths in the CTW, making it difficult to learn that a loss on scissors must be immediately followed by paper. A sharp learning curve happens in iterations 200-600 as the agent learns how to handle this distribution (by not playing scissors after losing on scissors) and the average reward becomes close to 1 (reward from performing random). However, even after 6000 iterations, the agent still hasn't manage to learn that a loss on scissors should be followed by paper for optimum reward.
 
 \section{Kuhn Poker results}
 In Kuhn Poker, the agent plays against a Nash Equillibruim AI, with gamma set to 0.5. More details about the environment can be found in \cite{kuhn}. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.\\\\
@@ -497,6 +501,7 @@ explore-decay & 0.9999\\
 \vspace{0.5mm}
 Table 4.6: The parameters used in the Kuhn Poker environment.
 \end{center}
+The CT depth was chosen in order to be slightly more than enough to play optimally. The horizon was chosen both to enable optimal strategy. While this could possibly be set to 3 to make sure there is no unfair bias, this is reasonable because the maximum iterations per environment cycle are 2.
 
 % \begin{figure}[h]
 %   \begin{center}
@@ -509,6 +514,8 @@ Table 4.6: The parameters used in the Kuhn Poker environment.
 %   \caption{Kuhn poker results}
 %   \label{fig:kuhn_results}
 % \end{figure}
+
+Kuhn Poker 
 
 \section{Pacman results}
 In partially observable Pacman, the agent plays in a maze, getting reward for consuming food but losing reward for running into walls and getting eaten by ghosts.\\\\
