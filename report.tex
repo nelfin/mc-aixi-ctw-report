@@ -56,7 +56,7 @@
 
 \begin{tabular}{ccccc}
   \setcounter{footnote}{0}
-  u4669875\footnotemark &
+  u4838292\footnotemark &
   u4667010\footnotemark &
   u4667844\footnotemark &
   u4850020\footnotemark &
@@ -448,7 +448,7 @@ The CT depth was chosen to be 30 so as to be large enough to store several perce
 The initial learning shows a steep curve, and the agent learns after 500 cycles that listening is gives safe reward (as a reward of 99 is better than picking a random door resulting in an average reward of 55). From this point onwards the agent seems to begin to notice the correlation between the percept provided by listen and the reward given by a door, and there is another small spike. The agent has likely had insufficient time to learn, so the reward has not converged, and is still far from the theoretical optimum of 107 average reward. This is caused by the difficulty in learning the observation reward sequence in the CTW; as the number of reward bits is 7, CTW learning takes a long time.
 
 \section{Grid world results}
-Grid world is a world where a blind agent (never given any observation) in a 4x4 grid needs to reach the bottom right corner, which will grant a reward of 1. All other rewards are 0. Moving outside the grid returns the agent back to the nearest square inside the grid. Once reaching the bottom right corner, the agent is teleported to a random other square in the grid. Note that under the specification, the agent may be teleported to the bottom right corne. The agent will not receive extra reward for this, but has an advantage in that either RIGHT or DOWN will result in an immediate reward. The environment is non-deterministic, however, contains an optimal sequence that is guaranteed a reward within 6 moves, namely RIGHT, DOWN repeated 3 times.\\\\
+Grid world is a world where a blind agent (never given any observation) in a 4x4 grid needs to reach the bottom right corner, which will grant a reward of 1. All other rewards are 0. Moving outside the grid returns the agent back to the nearest square inside the grid. Once reaching the bottom right corner, the agent is teleported to a random other square in the grid. Note that under the specification, the agent may be teleported to the bottom right corne. The agent will not receive extra reward for this, but has an advantage in that either RIGHT or DOWN will result in an immediate reward. The environment is non-deterministic, however, contains an optimal sequence of moves that is guaranteed a reward within 6 moves, namely RIGHT, DOWN repeated 3 times, which would give an average reward of 0.33.\\\\
 \begin{center}
 \begin{tabular}{| r | l | }
 \hline
@@ -475,7 +475,7 @@ These parameters are chosen such that the agent has enough depth in the CT to st
    \caption{Grid world results}
    \label{fig:grid_results}
  \end{figure}
-The results for this experiment are particularly interesting because the graph shows the agent clearly wandering around lost for the first 4000 cycles, but then starting to correctly identify the better strategy, and the reward sharply increases. As shown, the agent strategy has clearly not converged yet and needs more time. The actions taken shows the agent clearly favouring sequences with RIGHT and DOWN, dramatically increasing the average reward.
+The results for this experiment are particularly interesting because the graph shows the agent clearly wandering around lost for the first 4000 cycles, but then starting to correctly identify the better strategy, and the reward sharply increases. As shown, the agent strategy has clearly not converged yet and needs more time. The actions taken shows the agent clearly favouring sequences with RIGHT and DOWN, dramatically increasing the average reward. The learning 
 
 \section{Biased Rock paper scissors results}
 In Biased Rock Paper Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias. The environment is non-deterministic. Note that optimum play on this environment would involve the agent playing scissors until a loss, then playing paper directly afterwards. \\\\
@@ -504,6 +504,7 @@ The CT depth is chosen such that 2 observation and reward pairs can be stored, w
   \caption{Biased RPS results}
   \label{fig:rps_results}
 \end{figure}
+
 The results show that the agent is initially thrown off by the curious distribution of the environment, actually performing worse than random. While this may seem odd, it must be kept in mind that the CTW will initially perform poorly for non-deterministic sequence prediction as it can be thrown off by chance. If the agent is at a point where it predicts that scissors is the best move, it is more likely to predict that scissors will be the best next move as well. The problem is that the bias of playing two rocks in a row is quite subtle and will take a while to learn the correct paths in the CTW, making it difficult to learn that a loss on scissors must be immediately followed by paper. A sharp learning curve happens in iterations 200-600 as the agent learns how to handle this distribution (by not playing scissors after losing on scissors) and the average reward becomes close to 1 (reward from performing random). However, even after 6000 iterations, the agent still hasn't managed to learn that a loss on scissors should be followed by paper for optimum reward.
 
 \section{Kuhn Poker results}
@@ -538,7 +539,9 @@ The CT depth was chosen in order to be slightly more than enough to play optimal
 Kuhn Poker initially performs poorly against the Nash player, losing significantly more often than winning. However, interestingly, within 800 cycles, the agent begins to learns how to play the basic game (such as betting when seeing a king and passing with a jack), seen by the steep improvement which cuts out just above 1.87. Some finer points are learned up to 4000 cycles, possibly such as bluffing with a queen, reaching an average reward of 1.9. However, the agent does not have enough time to start learning how to exploit the Nash player and still loses more times than it wins.
 
 \section{Pacman results}
-In partially observable Pacman, the agent plays in a maze, getting reward for consuming food but losing reward for running into walls and getting eaten by ghosts.\\\\
+In partially observable Pacman, the agent plays in a maze, getting reward for consuming food but losing reward for running into walls and getting eaten by ghosts, according to the classical Pacman game. However, the agent cannot see the entire map, with a 16 bit percept based on 4 bits for line of sight for food, 3  bits for smelling food (based on manhattan distances of 2, 3 and 4), 4 bits for line of sight of ghosts, and finally 1 bit for the power pill.\\\\
+Several assumptions were made on top of the specification.  While under the influence of the power pill, the agent is able to eat ghosts instead. Note that there is no reward given for this, unlike the classic pacman game. Ghosts also do not respawn, differing from traditional pacman. The effect this has is the agent should learn that if it eats a power pill, a good strategy is to try to eat ghosts, which will maximise future reward. However, given the limitations of balancing search size against computational limits, it is unlikely that this will be seen to a large degree.\\\\
+The rewards were more complicated because the agent can trigger multiple events with one action and thus receive multiple rewards. A reward of -60 was given for running intot a ghost, -10 for a wall, -1 for moving, 10 for eating a pellet and 100 for finishing all pellets. Multiple events had their rewards added together, and 71 was added to the total to ensure the reward remained positive.
 \begin{center}
 \begin{tabular}{| r | l | }
 \hline
@@ -552,7 +555,7 @@ explore-decay & 0.99999\\
 \vspace{0.5mm}
 Table 4.7: The parameters used in the Pacman environment.
 \end{center}
-
+Whilst the CT depth and horizon chosen as parameters for pacman are far below the sizes required to play optimally, searching the depth of an entire game would be computationally infeasible. The parameters were chosen in order to balance computational time required. The agent horizon of 4 is very small but can still enable pacman to learn some advantageous behaviours in the environment, such as not walking into the direction where a ghost can be seen in line of sight.
 \begin{figure}[h]
   \begin{center}
     \begin{tikzpicture}
@@ -564,6 +567,8 @@ Table 4.7: The parameters used in the Pacman environment.
   \caption{Pacman results}
   \label{fig:pacman_results}
 \end{figure}
+
+The results show that the agent clearly did not have enough cycles to learn optimal behaviours. The average reward shows the agent has considerable difficulty learning not to run into walls or ghosts in the first 600 cycles. However after this it seems to begin to have enough information in the context tree to predict suboptimal reward for running into walls in one or two directions.
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
