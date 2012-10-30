@@ -486,7 +486,7 @@ Table 4.4: The parameters used in the Grid world environment.
 \end{center}
 These parameters are chosen such that the agent has enough depth in the CT to store the optimum strategy (depth 12), and will search a reasonable distance in the future (given the small environment).
 
-% \begin{figure}[h]
+%\begin{figure}[h]
 %   \begin{center}
 %     \begin{tikzpicture}
 %       \begin{axis}[xlabel=Cycles,ylabel near ticks,ylabel=Average reward,smooth,/pgfplots/no markers]
@@ -590,7 +590,7 @@ Whilst the CT depth and horizon chosen as parameters for pacman are far below th
   \label{fig:pacman_results}
 \end{figure}
 
-The results show that the agent clearly did not have enough cycles to learn optimal behaviours. The average reward shows the agent has considerable difficulty learning not to run into walls or ghosts in the first 600 cycles. However after this it seems to begin to have enough information in the context tree to predict suboptimal reward for running into walls in one or two directions.
+The results show that the agent clearly did not have enough cycles to learn optimal behaviours. The average reward shows the agent has considerable difficulty learning not to run into walls or ghosts in the first 600 cycles. However after this it seems to begin to have enough information in the context tree to predict suboptimal reward for running into walls in one or two directions; this causes the learning curve to become bumpy.
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
