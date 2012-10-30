@@ -16,9 +16,14 @@ import sys
 
 f = open(sys.argv[1], 'r')
 out = open(sys.argv[2], 'w')
+skip = int(sys.argv[3])
 reader = csv.reader(f)
 
 out.write("# ")
+i=0
 for row in reader:
-    writing = row[0] + "\t" + row[-1] + "\n"
-    out.write(writing)
+    if(i==0):
+        writing = row[0] + "\t" + row[-1] + "\n"
+        out.write(writing)
+    i+=1
+    i = i % skip
