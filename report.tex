@@ -392,7 +392,7 @@ Another graph with $\theta = 1$ is shown in Figure XXXX. With $\theta = 1$, the 
 \end{figure}
 
 \section{Tiger results}
-Tiger is a game where the agent chooses either two doors. Each door has a 50\% chance to contain a moderate reward of 110, or contain a reward of 0. A reward of 99 is given for listening, which has an 85\% chance to correctly reveal (as an observation) the size of the reward behind the door. This is a non-deterministic environment.\\\\
+Tiger is a game where the agent chooses out of two doors. Each door has a 50\% chance to contain a moderate reward of 110, or contain a reward of 0. A reward of 99 is given for listening, which has an 85\% chance to correctly reveal (as an observation) the size of the reward behind the door. This is a non-deterministic environment.\\\\
 \begin{center}
 \begin{tabular}{| r | l | }
 \hline
@@ -419,7 +419,7 @@ The CT depth was chosen to be 30 so as to be large enough to store several perce
    \caption{Tiger results}
    \label{fig:tiger_results}
  \end{figure}
-These results show that the in a steep curve, the agent learns after about 500 cycles that listening is a good idea (as a reward of 99 is better than picking a rarndom door resulting in an average reward of 55). From this point onwards the agent seems to begin to notice the correlation between the percept provided by listen and the reward given by a door, and there is another small spike. The agent has likely had insufficient time to learn, so the reward has not converged, and is still far from the theoretical optimum of 107 average reward.
+The initial learning shows a steep curve, and the agent learns after 500 cycles that listening is gives safe reward (as a reward of 99 is better than picking a random door resulting in an average reward of 55). From this point onwards the agent seems to begin to notice the correlation between the percept provided by listen and the reward given by a door, and there is another small spike. The agent has likely had insufficient time to learn, so the reward has not converged, and is still far from the theoretical optimum of 107 average reward. This is caused by the difficulty in learning the observation reward sequence in the CTW; as the number of reward bits is 7, CTW learning takes a long time.
 
 \section{Grid world results}
 Grid world is a world where a blind agent (never given any observation) in a 4x4 grid needs to reach the bottom right corner, which will grant a reward of 1. All other rewards are 0. Moving outside the grid returns the agent back to the nearest square inside the grid. Once reaching the bottom right corner, the agent is teleported to a random other square in the grid. Note that under the specification, the agent may be teleported to the bottom right corne. The agent will not receive extra reward for this, but has an advantage in that either RIGHT or DOWN will result in an immediate reward. The environment is non-deterministic, however, contains an optimal sequence that is guaranteed a reward within 6 moves, namely RIGHT, DOWN repeated 3 times.\\\\
@@ -478,11 +478,10 @@ The CT depth is chosen such that 2 observation and reward pairs can be stored, w
   \caption{Biased RPS results}
   \label{fig:rps_results}
 \end{figure}
-The results show that the agent is initially thrown off by the curious distribution of the environment, actually performing worse than random. While this may seem odd, it must be kept in mind that the CTW will initially perform poorly for non-deterministic sequence prediction as it can be thrown off by chance. If the agent is at a point where it predicts that scissors is the best move, it is more likely to predict that scissors will be the best next move as well. The problem is that the bias of playing two rocks in a row is quite subtle and will take a while to learn the correct paths in the CTW, making it difficult to learn that a loss on scissors must be immediately followed by paper. A sharp learning curve happens in iterations 200-600 as the agent learns how to handle this distribution (by not playing scissors after losing on scissors) and the average reward becomes close to 1 (reward from performing random). However, even after 6000 iterations, the agent still hasn't manage to learn that a loss on scissors should be followed by paper for optimum reward.
+The results show that the agent is initially thrown off by the curious distribution of the environment, actually performing worse than random. While this may seem odd, it must be kept in mind that the CTW will initially perform poorly for non-deterministic sequence prediction as it can be thrown off by chance. If the agent is at a point where it predicts that scissors is the best move, it is more likely to predict that scissors will be the best next move as well. The problem is that the bias of playing two rocks in a row is quite subtle and will take a while to learn the correct paths in the CTW, making it difficult to learn that a loss on scissors must be immediately followed by paper. A sharp learning curve happens in iterations 200-600 as the agent learns how to handle this distribution (by not playing scissors after losing on scissors) and the average reward becomes close to 1 (reward from performing random). However, even after 6000 iterations, the agent still hasn't managed to learn that a loss on scissors should be followed by paper for optimum reward.
 
 \section{Kuhn Poker results}
-In Kuhn Poker, the agent plays against a Nash Equillibruim AI, with gamma set to 0.5. More details about the environment can be found in \cite{kuhn}. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.\\\\
-The parameters used were:\\\\
+In Kuhn Poker, the agent plays against a Nash Equilibrium AI, with gamma set to 0.5. More details about the environment can be found in Kuhn \cite{kuhn}. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.\\\\
 \begin{center}
 \begin{tabular}{| r | l | }
 \hline
@@ -496,7 +495,7 @@ explore-decay & 0.9999\\
 \vspace{0.5mm}
 Table 4.6: The parameters used in the Kuhn Poker environment.
 \end{center}
-The CT depth was chosen in order to be slightly more than enough to play optimally. The horizon was chosen both to enable optimal strategy. While this could possibly be set to 3 to make sure there is no unfair bias, this is reasonable because the maximum iterations per environment cycle are 2.
+The CT depth was chosen in order to be slightly more than enough to play optimally. The horizon was chosen in order to enable optimal strategy. While this could possibly be set to 3 to make sure there is no unfair bias, this is reasonable because the maximum iterations per environment cycle are 2.
 
 \begin{figure}[h]
   \begin{center}
@@ -510,7 +509,7 @@ The CT depth was chosen in order to be slightly more than enough to play optimal
   \label{fig:kuhn_results}
 \end{figure}
 
-Kuhn Poker 
+Kuhn Poker initially performs poorly against the Nash player, losing significantly more often than winning. However, interestingly, within 800 cycles, the agent begins to learns how to play the basic game (such as betting when seeing a king and passing with a jack), seen by the steep improvement which cuts out just above 1.87. Some finer points are learned up to 4000 cycles, possibly such as bluffing with a queen, reaching an average reward of 1.9. However, the agent does not have enough time to start learning how to exploit the Nash player and still lose more times than it wins.
 
 \section{Pacman results}
 In partially observable Pacman, the agent plays in a maze, getting reward for consuming food but losing reward for running into walls and getting eaten by ghosts.\\\\
