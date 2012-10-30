@@ -15,6 +15,7 @@
 \newcommand{\et}{\end{tabbing}}
 \newcommand{\bcen}{\begin{center}}
 \newcommand{\ecen}{\end{center}}
+\newcommand{\mac}{MC-AIXI-CTW}
 
 \begin{document}
 
@@ -25,18 +26,12 @@
 \textsc{\Large Research School of Computer Science}\\[0.5cm]
 \textsc{\Large College of Engineering and}\\[0.2cm]
 \textsc{\Large Computer Science}\\[0.5cm]
-
-
- 
 \vspace{1.4cm}
-
 \hrule
-
 \vspace{1.4cm}
-
-{ \huge \bfseries An Implementation of MC-AIXI-CTW} \\
-
+{\huge \bfseries An Implementation of MC-AIXI-CTW} \\
 \vspace{0.4cm}
+
 
 \begin{tabular}{ccccc}
   Luke English\footnotemark &
@@ -47,24 +42,15 @@
 \end{tabular}
 
 \vspace{1.4cm}
-
-
 \hrule
-
 \vspace{1.0cm}
-
 \textsc{\large COMP4620 - Advanced Artificial Intelligence}\\
 \textsc{Assignment 2}\\
 \vspace{1.0cm}
-
 \hrule
-
-\vspace{1.4cm}
-
- 
+vspace{1.4cm}
 \vfill
- 
-% Bottom of the page
+Bottom of the page
 {\large \today} \\[0.5cm]
 
 \begin{tabular}{ccccc}
@@ -75,7 +61,6 @@
   u4850020\footnotemark &
   u4519169\footnotemark
 \end{tabular}
- 
 \end{center}
  
 \end{titlepage}
@@ -150,15 +135,17 @@ In addition to this, some configurations have parameters that are specific to th
 \chapter{MC-AIXI-CTW Implementation}
 \section{Context Tree Weighting}
 
-\chapter{Upper Confidence Tree}
+\section{Upper Confidence Tree}
 
-\chapter{Revert Function}
+\section{Revert Function}
 
-\section{Experimentation}
+\chapter{Experimentation}
 \label{sec:Experimentation}
 
 \section{Learning}
 \label{sec:Learning}
+\subsection{Sequence prediction}
+The CTW tree is the primarmy prediction mechanism in the \mac{} model. The CTW implementation of \mac{} was tested in isolation from the rest of the agent on a range of deterministic and non-deterministic sequence.
 
 \section{Extension}
 \label{sec:Extension}
