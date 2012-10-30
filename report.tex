@@ -369,10 +369,10 @@ The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We
 
  Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is 1 with probability $\theta \in [0,1]$, else the reward is 0. For a regular coin, $\theta = 0.5$, and there is no dominant strategy. However, if $\theta \not = 0.5$, dominant strategies emerge ($\theta > 0.5 \Rightarrow $ predict 1, $\; \theta < 0.5 \Rightarrow $ predict 0). The variable $\theta$ is hidden from the agent.
  
-\begin{figure}
+\begin{figure}[h]
 \centering
  \begin{tikzpicture}
-    \begin{axis}[xlabel=Cycle,ylabel=Average reward,title={Coinflip $\theta=0.2$}]
+    \begin{axis}[xlabel=Cycle,ylabel=Average reward]
       \pgfplotstableread{graph_data/coinflip_p=0_2.plot.csv}\plotcsv
       \addplot+[every mark/.append style={no markers},smooth] table
       {\plotcsv};
@@ -403,11 +403,11 @@ Figure \ref{fig:coin_0_2} shows the results for $\theta=0.2$. The theoretical be
 %   \caption{Coin flip results}
 %   \label{fig:coinflip_results}
 % \end{figure}
-Another graph with $\theta = 1$ is shown in Figure XXXX. With $\theta = 1$, the maximum theoretical reward is $1$, with the strategy of picking 1 always. We can see that our implementation of \mac{} quickly converges to this strategy of picking 1 always, with the average reward approaching 1.
+Another graph with $\theta = 1$ is shown in Figure \ref{fig:coin_1_0}. With $\theta = 1$, the maximum theoretical reward is $1$, with the strategy of picking 1 always. We can see that our implementation of \mac{} quickly converges to this strategy of picking 1 always, with the average reward approaching 1.
 \begin{figure}
 \centering
  \begin{tikzpicture}
-    \begin{axis}[xlabel=Cycle,ylabel=Average reward,title={Coinflip $\theta=1.0$}]
+    \begin{axis}[xlabel=Cycle,ylabel=Average reward]
       \pgfplotstableread{graph_data/coinflip_p=1_0.plot.csv}\plotcsv
       \addplot+[every mark/.append style={no markers},smooth] table
       {\plotcsv};
