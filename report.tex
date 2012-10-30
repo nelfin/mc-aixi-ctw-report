@@ -136,7 +136,7 @@ In addition to this, some configurations have parameters that are specific to th
 \chapter{MC-AIXI-CTW Implementation}
 \section{Design Choices}
 
-We have implemented MC-AIXI-CTW in the C++ coding language, which has a number of benefits and drawbacks. 
+We have implemented MC-AIXI-CTW in the C++ coding language, which has a number of benefits. Firstly, C++ is a better option for implementation than C or another imperative language, as objects allow us to pass recursive and enumerated structures between processes. Secondly, C++ is a much more low-level language than any other object-oriented language, which allows us to perform much more optimal processing; and dynamic memory allocation means that we can ensure that our program doesn't take up more memory than we need it to, so that it will overall take less time to run.
 
 \section{Context Tree Weighting}
 The algorithm for implementing context-tree weighting (CTW) mainly consists of the methods and objects given in the file \texttt{predict.cpp}, along with its corresponding \texttt{.hpp} file. We run through these from the beginning of the file to its end.  
@@ -343,9 +343,6 @@ The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We
 
 \section{Coin flip results}
 Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is 1 with probability $\theta \in [0,1]$, else the reward is 0. For a regular coin, $\theta = 0.5$, and there is no dominant strategy. However, if $\theta \not = 0.5$, dominant strategies emerge ($\theta > 0.5 \Rightarrow $ predict 1, $\; \theta < 0.5 \Rightarrow $ predict 0). The variable $\theta$ is hidden from the agent.
-\section{Coin flip results}
-294	 300	
- Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is 1 with probability $\theta \in [0,1]$, else the reward is 0. For a regular coin, $\theta = 0.5$, and there is no dominant strategy. However, if $\theta \not = 0.5$, dominant strategies emerge ($\theta > 0.5 \Rightarrow $ predict 1, $\; \theta < 0.5 \Rightarrow $ predict 0). The variable $\theta$ is hidden from the agent.
 \begin{figure}
 \centering
  \begin{tikzpicture}
