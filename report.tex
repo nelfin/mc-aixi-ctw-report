@@ -157,7 +157,7 @@ Here we have the entire context tree represented as an object, which is a glorif
 \item{\texttt{logProbWeighted, logProbEstimated, visits, child}}
 
     These methods are simply defined. Since the values stored in variables such as \texttt{m\_log\_prob\_weighted} are declared privately, it is required to use a public method to get them. \texttt{visits} grabs the sum of the counts for the child nodes - the number of times that we have seen this particular node in our travels; and \texttt{child} takes a symbol, and returns a pointer to the correct (left or right) child.
-}
+
 \item{\texttt{update}
     \texttt{update} is one of the most important methods in the entire CTW implementation. We recurse through the tree, starting from the node that calls this method, popping symbols from the end of the history until we reach a leaf; as in the CTW algorithm. When we do, we update the counts for the leaf based on the symbol that is passed to \texttt{update}, and then follow the branch back up the tree, using the equation given for $P_{w}$: \[ P_{w} = 
     \begin{cases}
