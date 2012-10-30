@@ -191,7 +191,7 @@ A sequence of this type with size ~9000 (3000 iterations) is given to the CTW tr
 S = x^{\text{obs}}_0,\; x^{\text{rew}}_0,\; x^{\text{act}}_1,\;\;\;...\;\;\;,x^{\text{act}}_{3000},\;x^{\text{obs}}_{3000}
 \]
 
-The CTW tree is then asked to predict which bit is the next in the sequence. The idea of this experiment is to determine if the CTW tree ``understands'' the rules of the game - if it understood, it would predict $x^{\text{rew}}_{3000} = x^{\text{act}}_{3000} \land x^{\text{obs}}_{3000}$.
+The CTW tree is then asked to predict which bit is the next in the sequence. The idea of this experiment is to determine if the CTW tree ``understands'' the rules of the game - if it understood, it would predict $x^{\text{rew}}_{3000} = (x^{\text{act}}_{3000} \land x^{\text{obs}}_{3000}) \lor (\lnot x^{\text{act}}_{3000} \land \lnot x^{\text{obs}}_{3000})$.
 
 The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We see that it correctly predicts the reward bit given the action and observation bits. This provides some verification that the implementation of the CTW tree is correct.
 \begin{figure}
