@@ -309,10 +309,10 @@ The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We
 \section{Coin flip results}
 Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is 1 with probability $\theta \in [0,1]$, else the reward is 0. For a regular coin, $\theta = 0.5$, and there is no dominant strategy. However, if $\theta \not = 0.5$, dominant strategies emerge ($\theta > 0.5 \Rightarrow $ predict 1, $\; \theta < 0.5 \Rightarrow $ predict 0). The variable $\theta$ is hidden from the agent.
 
-\begin{figure}
+\begin{figure}[h]
   \begin{center}
     \begin{tikzpicture}
-      \begin{axis}[smooth,/pgfplots/no markers,legend style={
+      \begin{axis}[xlabel=Cycle,ylabel=Average reward,smooth,/pgfplots/no markers,legend style={
                                                cells={anchor=east},
                                                legend pos=outer north east,
                                                }]
@@ -357,6 +357,21 @@ explore-decay & 0.999\\
 \vspace{0.5mm}
 Table 4.3: The parameters used in the Tiger environment.
 \end{center}
+\end{tabular}
+
+\begin{figure}[h]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+        \addplot table {graph_data/tiger.plot.csv};
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  \caption{Tiger results}
+  \label{fig:tiger_results}
+\end{figure}
+
+>>>>>>> d7cb7be1bb5ca4710f837b20f40a3f507a622ddc
 \section{Grid world results}
 Grid world is a world where a blind agent (never given any observation) in a 4x4 grid needs to reach the bottom right corner, which will grant a reward of 1. All other rewards are 0. Moving outside the grid returns the agent back to the nearest square inside the grid. Once reaching the bottom right corner, the agent is teleported to a random other square in the grid. Note that under the specification, the agent may be teleported to the bottom right corne. The agent will not receive extra reward for this, but has an advantage in that either RIGHT or DOWN will result in an immediate reward. The environment is non-deterministic, however, contains an optimal sequence that is guaranteed a reward within 6 moves, namely RIGHT, DOWN repeated 3 times.\\\\
 \begin{center}
