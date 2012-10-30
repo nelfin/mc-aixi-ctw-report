@@ -419,28 +419,28 @@ Another graph with $\theta = 1$ is shown in Figure \ref{fig:coin_1_0}. With $\th
 
 We also include in Figure \ref{fig:coinflip_results} a graph of all results for \mac{} with $p$ ranging from 0 to 1 for the interested reader.
 
-\begin{figure}[h]
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{axis}[xlabel=Cycle,ylabel=Average reward,smooth,/pgfplots/no markers,legend style={
-                                               cells={anchor=east},
-                                               legend pos=outer north east,
-                                               },cycle list name=color list]
-        \foreach \p in {0, 2, 4, 6, 8} {
-          \addplot table {graph_data/coinflip_p=0_\p.plot.csv};
-          \addlegendentryexpanded{$p = 0.\p$};
-        }
-        \addplot table {graph_data/coinflip_p=1_0.plot.csv};
-        \addlegendentry{$p = 1.0$};
-      \end{axis}
-    \end{tikzpicture}
-  \end{center}
-  \caption{Coin flip results}
-  \label{fig:coinflip_results}
-\end{figure}
+%\begin{figure}[h]
+ % \begin{center}
+%    \begin{tikzpicture}
+%      \begin{axis}[xlabel=Cycle,ylabel=Average reward,smooth,/pgfplots/no markers,legend style={
+%                                               cells={anchor=east},
+%                                               legend pos=outer north east,
+%                                               },cycle list name=color list]
+%        \foreach \p in {0, 2, 4, 6, 8} {
+%          \addplot table {graph_data/coinflip_p=0_\p.plot.csv};
+%          \addlegendentryexpanded{$p = 0.\p$};
+%        }
+%        \addplot table {graph_data/coinflip_p=1_0.plot.csv};
+%        \addlegendentry{$p = 1.0$};
+%      \end{axis}
+%    \end{tikzpicture}
+%  \end{center}
+%  \caption{Coin flip results}
+%  \label{fig:coinflip_results}
+%\end{figure}
 
 \section{Tiger results}
-Tiger is a game where the agent chooses out of two doors. Each door has a 50\% chance to contain a moderate reward of 110, or contain a reward of 0. A reward of 99 is given for listening, which has an 85\% chance to correctly reveal (as an observation) the size of the reward behind the door. This is a non-deterministic environment.\\\\
+Tiger is a game where the agent chooses out of two doors. Each door has a 50\% chance to contain a moderate reward of 110, or contain a reward of 0. A reward of 99 is given for listening, which has an 85\% chance to correctly reveal (as an observation) the size of the reward behind the door. This is a non-deterministic environment. Tiger is an interesting environment because effective exploitation requires patience. Selecting a door immediately will result in a far lower expected reward than listening until 3 confirmations that a door does not contain the tiger (low reward). Because of this, the optimal action sequence is long, even though greedily picking a door immediately can result in high reward.\\\\
 \begin{center}
 \begin{tabular}{| r | l | }
 \hline
@@ -486,17 +486,17 @@ Table 4.4: The parameters used in the Grid world environment.
 \end{center}
 These parameters are chosen such that the agent has enough depth in the CT to store the optimum strategy (depth 12), and will search a reasonable distance in the future (given the small environment).
 
- \begin{figure}[h]
-   \begin{center}
-     \begin{tikzpicture}
-       \begin{axis}[xlabel=Cycles,ylabel near ticks,ylabel=Average reward,smooth,/pgfplots/no markers]
-         \addplot table {graph_data/grid.plot.csv};
-       \end{axis}
-     \end{tikzpicture}
-   \end{center}
-   \caption{Grid world results}
-   \label{fig:grid_results}
- \end{figure}
+% \begin{figure}[h]
+%   \begin{center}
+%     \begin{tikzpicture}
+%       \begin{axis}[xlabel=Cycles,ylabel near ticks,ylabel=Average reward,smooth,/pgfplots/no markers]
+%         \addplot table {graph_data/grid.plot.csv};
+%       \end{axis}
+%     \end{tikzpicture}
+%   \end{center}
+%   \caption{Grid world results}
+%   \label{fig:grid_results}
+% \end{figure}
 The results for this experiment are particularly interesting because the graph shows the agent clearly wandering around lost for the first 4000 cycles, but then starting to correctly identify the better strategy, and the reward sharply increases. As shown, the agent strategy has clearly not converged yet and needs more time. The actions taken shows the agent clearly favouring sequences with RIGHT and DOWN, dramatically increasing the average reward. The learning 
 
 \section{Biased Rock paper scissors results}
