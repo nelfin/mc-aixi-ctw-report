@@ -164,11 +164,60 @@ Where\\
 r_\text{act}, r_\text{obs} \text{ are random bits }
 \]
 \section{Coin flip results}
+Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is one with probability $\theta \in [0,1]$, else the reward is 0.
 \section{Tiger results}
+The parameters used were:\\\\
+\begin{tabular}{| r | l | }
+\hline
+mc-simulations & 50\\
+exploration & 0.01\\
+explore-decay & 0.999\\
+\hline
+\end{tabular}
 \section{Grid world results}
-\section{Rock paper scissors results}
-\section{Kuhn poker results}
+
+\begin{tabular}{| r | l | }
+\hline
+mc-simulations & 50\\
+exploration & 0.01\\
+explore-decay & 0.99999\\
+\hline
+\end{tabular}
+\section{Biased Rock paper scissors results}
+In Biased Rock Paper Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias.\\\\
+The parameters used were:\\\\
+\begin{tabular}{| r | l | }
+\hline
+mc-simulations & 50\\
+exploration & 0.1\\
+explore-decay & 0.999\\
+\hline
+\end{tabular}
+\section{Kuhn Poker results}
+In Kuhn Poker, the agent plays against a Nash Equillibruim AI, with gamma set to 0.5. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.\\\\
+The parameters used were:\\\\
+\begin{tabular}{| r | l | }
+\hline
+mc-simulations & 50\\
+exploration & 0.01\\
+explore-decay & 0.9999\\
+\hline
+\end{tabular}
 \section{Pacman results}
+In Pacman\\\\
+The parameters used were:\\\\
+\begin{tabular}{| r | l | }
+\hline
+mc-simulations & 50\\
+exploration & 0.01\\
+explore-decay & 0.99999\\
+\hline
+\end{tabular}
+
+ \begin{center}
+\emph{Table 5.1 Number of problems where complete solutions were found}
+\end{center}
+The parameters used were:
 \chapter{Extension}
 % This is just a test figure, to see what happens with PGFPlots and such.
 %\begin{figure}[h]
