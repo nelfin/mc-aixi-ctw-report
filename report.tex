@@ -155,30 +155,35 @@ Here we have the entire context tree represented as an object, which is a glorif
 \begin{itemize}
 \item{\texttt{logProbWeighted, logProbEstimated, visits, child}
 
-    These methods are simply defined. Since the values stored in variables such as \texttt{m_log_prob_weighted} are declared privately, it is required to use a public method to get them. \texttt{visits} grabs the sum of the counts for the child nodes - the number of times that we have seen this particular node in our travels; and \texttt{child} takes a symbol, and returns a pointer to the correct (left or right) child.
+    These methods are simply defined. Since the values stored in variables such as \texttt{m\_log\_prob\_weighted} are declared privately, it is required to use a public method to get them. \texttt{visits} grabs the sum of the counts for the child nodes - the number of times that we have seen this particular node in our travels; and \texttt{child} takes a symbol, and returns a pointer to the correct (left or right) child.
   }
 \item{\texttt{update}
 
     \texttt{update} is one of the most important methods in the entire CTW implementation. We recurse through the tree, starting from the node that calls this method, popping symbols from the end of the history until we reach a leaf; as in the CTW algorithm. When we do, we update the counts for the leaf based on the symbol that is passed to \texttt{update}, and then follow the branch back up the tree, using the equation given for $P_{w}$: \[ P_{w} = \frac{1}{2}P_{KT}(n) + \frac{1}{2}P^{0}P^{1}. \] % can someone check this against the literature?
-This method doesn't 
+This method doesn't change the history, as we push the popped symbols back onto the stack when we're done with each call.
   }
 \item{\texttt{size}
     
+    This is a simple method; it counts the total size of the subtree with the calling node as the root. 
   }
 \item{\texttt{logKTMul}
     
+    This method calculates the Laplacian estimator $P_{KT}$ for the node, given a symbol $n \in \{0,1\}$, where \[ P_{KT}(n) = \frac{\#n + 0.5}{\#n + \#(1-n) + 1}.\] This forms the base multiplier for the probabilities in the context tree.
   }
 \item{\texttt{revert}
     
+    If \texttt{update} is the method which adds a symbol to the context tree, then \texttt{revert} is the method which removes it. We again recurse down the tree, removing the symbol from the leaf, and pushing the changes back up the tree using the current history. Again, we don't change the history with this method.
   }
 \item{\texttt{prettyPrintNode}
     
+    Mainly used for testing, this method prints the counts and probabilities at a node, indented given the depth in the tree.
   }
 \end{itemize}
 \subsubsection{\texttt{ContextTree}}
 \begin{itemize}
 \item{\texttt{clear}
     
+    Instead of using the generic destructor \texttt{~ContextTree}, this method simply deletes the existing history and disassociates the pointer to the root, making a new root and associating the tree with that root instead.
   }
 \item{\texttt{update}
 
@@ -186,17 +191,18 @@ This method doesn't
   }
 \item{\texttt{updateHistory}
     
+    Here we simply push a list of symbols onto the back of the history.
   }
 \item{\texttt{revert}
     
+    This version of \texttt{revert} pops the last symbol off the history, and uses it to pass to the \texttt{CTNode} version. It is useful because only the \texttt{ContextTree} has access to the variable \texttt{m\_history}.
   }
 \item{\texttt{revertHistory}
     
-  }
-\item{\texttt{predict}
-
+    Unlike \texttt{revert}, this method takes in a size to revert back to (this corresponds to a previous age of the context tree), and simply pops symbols from the history until we get back to that size. 
   }
 \item{\texttt{genRandomSymbols}
+    
     
   }
 \item{\texttt{genRandomSymbolsAndUpdate}
