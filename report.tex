@@ -104,20 +104,20 @@ search (Monte-Carlo Tree Search with the Upper Confidence Bound)
 \section{Arguments}
 The agent can be compile with the \texttt{make} command. The agent then can then be run using\\
 
-\texttt{./main <environment> <logfile>}\\
+\texttt{./main <environment> [logfile]}\\
 
 \texttt{<environment>} is a compulsory argument, which specifies the environment configuration file the agent is to use. In this implementation, it is one of the following
 \begin{itemize}
-\item \texttt{coinflip.conf}: Biased coin flip enviroment
-\item \texttt{grid.conf}: Gridworld environment
-\item \texttt{kuhnpoker.conf}: Kuhn poker environment
+\item \texttt{coinflip.conf}: Biased Coin Flip enviroment
+\item \texttt{grid.conf}: Grid World environment
+\item \texttt{kuhnpoker.conf}: Kuhn Poker environment
 \item \texttt{pacman.conf}: Pacman environment
-\item \texttt{rps.conf}: Biased rock paper scissors environment
+\item \texttt{rps.conf}: Biased Rock-Paper-Scissors environment
 \item \texttt{tiger.conf}: ``Tiger'' Environment
 \item \texttt{composite.conf}: A combination of the above environments
 \end{itemize}
-\texttt{<logfile>} is an optional argument, which specifies the name of a log file to output results to.
-\newline
+\texttt{[logfile]} is an optional argument, which specifies the name of a log file to output results to.
+
 \section{Configuration files}
 \texttt{.conf} files are \emph{configuration files}, specifying which environment is to be used, and relevant parameters for each environment. Each configuration file has the following parameters
 \begin{itemize}
@@ -209,7 +209,7 @@ This method doesn't change the history, as we push the popped symbols back onto 
 \begin{itemize}
 \item{\texttt{clear}
     
-    Instead of using the generic destructor \texttt{~ContextTree}, this method simply deletes the existing history and disassociates the pointer to the root, making a new root and associating the tree with that root instead.
+    Instead of using the generic destructor \texttt{\~{}ContextTree}, this method simply deletes the existing history and disassociates the pointer to the root, making a new root and associating the tree with that root instead.
   }
 \item{\texttt{update}
 
@@ -321,7 +321,7 @@ Most of the Upper Confidence Tree (UCT) algorithm is implemented in the files \t
 \chapter{Experimentation}
 \section{Sequence prediction}
 \label{sec:Sequence prediction}
-The CTW tree is the primarmy prediction mechanism in the \mac{} model. The CTW implementation of \mac{} was tested in isolation from the rest of the agent on a range of deterministic and non-deterministic sequence. This was useful for debugging purposes, and the results are an interesting biproduct of \mac{}.
+The CTW tree is the primary prediction mechanism in the \mac{} model. The CTW implementation of \mac{} was tested in isolation from the rest of the agent on a range of deterministic and non-deterministic sequence. This was useful for debugging purposes, and the results are an interesting biproduct of \mac{}.
 \subsection{Deterministic sequence prediction}
 Several simple sequences were given to the CTW tree, and the CTW tree was asked to continue the sequence. This can be seen in Figure~\ref{tab:det_seq_pred}. We can see that the CTW tree is able to correctly predict the next bit, or multiple bits, in the sequence.
 
@@ -366,13 +366,14 @@ r_\text{act}, r_\text{obs} \text{ are random bits }
 The idea of this sequence $S$ is to simulate a coinflip environment history sequence. The random bits $x^{\text{obs}}_i$ and $x^{\text{act}}_i$ simulate random coin flips, and the reward bit $x^{\text{act}}_i$ compares them. The action bit $x^{\text{act}}_i$ is random in this sequence.
 
 A sequence of this type with size ~9000 (3000 iterations) is given to the CTW tree, up to the point
+
 \[
-S = x^{\text{obs}}_0,\; x^{\text{rew}}_0,\; x^{\text{act}}_1,\;\;\;...\;\;\;,x^{\text{act}}_{3000},\;x^{\text{obs}}_{3000}
+S = x^{\text{obs}}_0,\; x^{\text{rew}}_0,\; x^{\text{act}}_1,\;\;\;...\;\;\;,x^{\text{act}}_{3000},\;x^{\text{obs}}_{3000}.
 \]
 
-The CTW tree is then asked to predict which bit is the next in the sequence. The idea of this experiment is to determine if the CTW tree ``understands'' the rules of the game - if it understood, it would predict $x^{\text{rew}}_{3000} = (x^{\text{act}}_{3000} \land x^{\text{obs}}_{3000}) \lor (\lnot x^{\text{act}}_{3000} \land \lnot x^{\text{obs}}_{3000})$.
+The CTW tree is then asked to predict which bit is the next in the sequence. The idea of this experiment is to determine if the CTW tree ``understands'' the rules of the game - if it understood, it would predict \[x^{\text{rew}}_{3000} = (x^{\text{act}}_{3000} \land x^{\text{obs}}_{3000}) \lor (\lnot x^{\text{act}}_{3000} \land \lnot x^{\text{obs}}_{3000}).\]
 
-The results of this experiment are show in Figure~\ref{tab:non_det_seq_pred}. We see that it correctly predicts the reward bit given the action and observation bits. This provides some verification that the implementation of the CTW tree is correct.
+The results of this experiment are shown in Table~\ref{tab:non_det_seq_pred}. We see that it correctly predicts the reward bit given the action and observation bits. This provides some verification that the implementation of the CTW tree is correct.
 
 \begin{table}
 \bcen
@@ -385,13 +386,13 @@ The results of this experiment are show in Figure~\ref{tab:non_det_seq_pred}. We
 \end{tabular}
 \egroup
 \ecen
-\caption{Predicted values for $x^{\text{rew}}_{3000}$}
+\caption{Predicted values for $x^{\text{rew}}_{3000}$.}
 \label{tab:non_det_seq_pred}
 \end{table}
 
-\section{Coin flip results}
+\section{Coin Flip results}
 
- Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is 1 with probability $\theta \in [0,1]$, else the reward is 0. For a regular coin, $\theta = 0.5$, and there is no dominant strategy. However, if $\theta \not = 0.5$, dominant strategies emerge ($\theta > 0.5 \Rightarrow $ predict 1, $\; \theta < 0.5 \Rightarrow $ predict 0). The variable $\theta$ is hidden from the agent.
+ Coin Flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is 1 with probability $\theta \in [0,1]$, else the reward is 0. For a regular coin, $\theta = 0.5$, and there is no dominant strategy. However, if $\theta \not = 0.5$, dominant strategies emerge ($\theta > 0.5 \Rightarrow $ predict 1, $\; \theta < 0.5 \Rightarrow $ predict 0). The variable $\theta$ is hidden from the agent.
  
 \begin{figure}[h]
 \centering
@@ -402,7 +403,7 @@ The results of this experiment are show in Figure~\ref{tab:non_det_seq_pred}. We
       {\plotcsv};
     \end{axis}
   \end{tikzpicture}
-\caption{Coinflip simulation for $\theta=0.2$}
+\caption{Coin Flip simulation for $\theta=0.2$.}
 \label{fig:coin_0_2}
 \end{figure}
 	
@@ -419,11 +420,9 @@ Another graph with $\theta = 1$ is shown in Figure~\ref{fig:coin_1_0}. With $\th
       {\plotcsv};
     \end{axis}
   \end{tikzpicture}
-\caption{Coinflip simulation for $\theta=1.0$}
+\caption{Coin Flip simulation for $\theta=1.0$.}
 \label{fig:coin_1_0}
 \end{figure}
-
-We also include in Figure~\ref{fig:coinflip_results} a graph of all results for \mac{} with $p$ ranging from 0 to 1 for the interested reader.
 
 \begin{figure}[h]
 \begin{center}
@@ -441,11 +440,11 @@ We also include in Figure~\ref{fig:coinflip_results} a graph of all results for 
     \end{axis}
   \end{tikzpicture}
 \end{center}
-\caption{Coin flip results}
+\caption{Coin Flip results.}
 \label{fig:coinflip_results}
 \end{figure}
 
-Note the discrepancy that the agent has difficulty correctly exploting p=0.8 or o=0.2, settling on 0.6 reward. This is likely caused by the extra depth of the context tree confusing the algorithm by asking it to store useless information, which in some sense `dilutes' the precision. This greatly increases the number of cycles required for convergence. p=1 or p=0 converge well because the sequence becomes completely deterministic, greatly reducing the difficulty required to predict the next bits of the sequence.
+We also include in Figure~\ref{fig:coinflip_results} a graph of all results for \mac{} with $p$ ranging from 0 to 1 for the interested reader. Note the discrepancy that the agent has difficulty correctly exploting p=0.8 or o=0.2, settling on 0.6 reward. This is likely caused by the extra depth of the context tree confusing the algorithm by asking it to store useless information, which in some sense `dilutes' the precision. This greatly increases the number of cycles required for convergence. p=1 or p=0 converge well because the sequence becomes completely deterministic, greatly reducing the difficulty required to predict the next bits of the sequence.
 
 \section{Tiger results}
 Tiger is a game where the agent chooses out of two doors. Each door has a 50\% chance to contain a moderate reward of 110, or contain a reward of 0. A reward of 99 is given for listening, which has an 85\% chance to correctly reveal (as an observation) the size of the reward behind the door. This is a non-deterministic environment. Tiger is an interesting environment because effective exploitation requires patience. Selecting a door immediately will result in a far lower expected reward than listening until 3 confirmations that a door does not contain the tiger (low reward). Because of this, the optimal action sequence is long, even though greedily picking a door immediately can result in high reward.
@@ -475,13 +474,13 @@ The CT depth was chosen to be 30 so as to be large enough to store several perce
        \end{axis}
      \end{tikzpicture}
    \end{center}
-   \caption{Tiger results}
+   \caption{Tiger results.}
    \label{fig:tiger_results}
  \end{figure}
 
 The initial learning shows a steep curve, and the agent learns after 500 cycles that listening is gives safe reward (as a reward of 99 is better than picking a random door resulting in an average reward of 55). From this point onwards the agent seems to begin to notice the correlation between the percept provided by listen and the reward given by a door, and there is another small spike. The agent has likely had insufficient time to learn, so the reward has not converged, and is still far from the theoretical optimum of 107 average reward. This is caused by the difficulty in learning the observation reward sequence in the CTW; as the number of reward bits is 7, CTW learning takes a long time.
 
-\section{Grid world results}
+\section{Grid World results}
 Grid world is a world where a blind agent (never given any observation) in a 4x4 grid needs to reach the bottom right corner, which will grant a reward of 1. All other rewards are 0. Moving outside the grid returns the agent back to the nearest square inside the grid. Once reaching the bottom right corner, the agent is teleported to a random other square in the grid. Note that under the specification, the agent may be teleported to the bottom right corne. The agent will not receive extra reward for this, but has an advantage in that either RIGHT or DOWN will result in an immediate reward. The environment is non-deterministic, however, contains an optimal sequence of moves that is guaranteed a reward within 6 moves, namely RIGHT, DOWN repeated 3 times, which would give an average reward of 0.33. The parameters were chosen such that the agent has enough depth in the CT to store the optimum strategy (depth 12), and will search a reasonable distance in the future (given the small environment).
 
 \begin{table}[h]
@@ -495,7 +494,7 @@ exploration & 0.01\\
 explore-decay & 0.99999\\
 \hline
 \end{tabular}
-\caption{The parameters used in the Grid world environment.}
+\caption{The parameters used in the Grid World environment.}
 \end{center}
 \end{table}
 
@@ -509,13 +508,13 @@ These parameters are chosen such that the agent has enough depth in the CT to st
      \end{axis}
    \end{tikzpicture}
  \end{center}
- \caption{Grid world results}
+ \caption{Grid World results.}
  \label{fig:grid_results}
 \end{figure}
 The results for this experiment are particularly interesting because the graph shows the agent clearly wandering around lost for the first 4000 cycles, but then starting to correctly identify the better strategy, and the reward sharply increases. As shown, the agent strategy has clearly not converged yet and needs more time. The actions taken shows the agent clearly favouring sequences with RIGHT and DOWN, dramatically increasing the average reward. The average reward continues to increase but has not quite reached the optimum yet.
 
-\section{Biased Rock paper scissors results}
-In Biased Rock Paper Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias. The environment is non-deterministic. Note that optimum play on this environment would involve the agent playing scissors until a loss, then playing paper directly afterwards.
+\section{Biased Rock-Paper-Scissors results}
+In Biased Rock-Paper-Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias. The environment is non-deterministic. Note that optimum play on this environment would involve the agent playing scissors until a loss, then playing paper directly afterwards.
 
 \begin{table}[h]
 \begin{center}
@@ -543,7 +542,7 @@ The CT depth is chosen such that 2 observation and reward pairs can be stored, w
       \end{axis}
     \end{tikzpicture}
   \end{center}
-  \caption{Biased RPS results}
+  \caption{Biased RPS results.}
   \label{fig:rps_results}
 \end{figure}
 
@@ -552,7 +551,7 @@ The results show that the agent is initially thrown off by the curious distribut
 
 To provide \mac\ with enough leeway to store sufficient information to model
 the more complicated Markov process in RPS, an extensive simulation with was
-run with the parameters specified as in Table \ref{tab:new_rps_params}.
+run with the parameters specified as in Table~\ref{tab:new_rps_params}.
 
 \begin{table}
 \begin{center}
@@ -566,7 +565,7 @@ explore-decay & 0.999999\\
 \hline
 \end{tabular}
 \end{center}
-\caption{New parameters for Rock-Paper-Scissors.}
+\caption{New parameters for biased RPS.}
 \label{tab:new_rps_params}
 \end{table}
 
@@ -583,7 +582,7 @@ per cycle.
       \end{axis}
     \end{tikzpicture}
   \end{center}
-  \caption{Biased RPS results with larger CTW depth}
+  \caption{Biased RPS results with larger CTW depth.}
   \label{fig:rps_results_ctw}
 \end{figure}
 
@@ -615,7 +614,7 @@ The CT depth was chosen in order to be slightly more than enough to play optimal
       \end{axis}
     \end{tikzpicture}
   \end{center}
-  \caption{Kuhn poker results}
+  \caption{Kuhn Poker results.}
   \label{fig:kuhn_results}
 \end{figure}
 
@@ -654,13 +653,13 @@ Whilst the CT depth and horizon chosen as parameters for pacman are far below th
       \end{axis}
     \end{tikzpicture}
   \end{center}
-  \caption{Pacman results}
+  \caption{Pacman results.}
   \label{fig:pacman_results}
 \end{figure}
 
 The results show that the agent clearly did not have enough cycles to learn optimal behaviours. The average reward shows the agent has considerable difficulty learning not to run into walls or ghosts in the first 600 cycles. However after this it seems to begin to have enough information in the context tree to predict suboptimal reward for running into walls in one or two directions; this causes the learning curve to become bumpy.
 
-\section{Composite Environments}
+\section{Composite environments}
 
 A composite environment is an environment which behaves like another environment for a certain number of time steps and then switches to behaving like another environment. In this way it becomes possible to examine whether the agent can develop transfer knowledge from one environment to another. It is also possible to examine whether the agent will remember the original environment when reintroduced to it, and therefore more quickly conform to optimal behaviour in that environment the second time it is introduced to it. The first test is to change between coinflip environments with different weighted coins. The second is to change from a coinflip environment to a tiger environment, and then back to the original coinflip environment.  
 
@@ -672,14 +671,15 @@ A composite environment is an environment which behaves like another environment
       \end{axis}
     \end{tikzpicture}
   \end{center}
-  \caption{Composite coinflip environment $p=\{1;0;1\}$}
+  \caption{Composite Coin Flip environment $p=\{0.9;0.1;0.9\}$.}
   \label{fig:coin_comp101}
 \end{figure}
 
-In the first case (Figure \ref{fig:coin_comp101}), the weights are chosen so that an action of 1 is optimal in the first and third environments and an action of 0 is optimal in the second environment. In the second case, the weight of the coin is chosen to be 1 in both instances of  coinflip, such that all observations in the first and third environments are heads. The tiger environment is standard in the sense that the chance that listening will return the correct observation about which door the tiger is behind is 0.85 and the chance that the gold will be behind the left door is equal to the chance that it is behind the right door. In both cases the environment switches at cycle 500 and then switches back at cycle 1000.
+In the example case (Figure \ref{fig:coin_comp101}), the weights are chosen so that an action of 1 is optimal in the first and third environments and an action of 0 is optimal in the second environment. The agent does not seem to lose too much when the environment is switched, as it quickly learns that tails is a better choice. When it is switched back, it still has a context which says that if it sees a few heads, it should probably pick heads. Note that the environment switches at cycle 500 and then switches back at cycle 1000.
 
-\newpage
-The composite environment must have a standard ct-depth and a standard number of bits for actions, observations and rewards over all environments that it runs, because the agent takes these values at the start. So, the maximum values (over the tested environments) of these are taken. That is, in the case with just coinflip environments, we take just the standard values for coinflip. In the case of coinflip and tiger, we take the standard values for tiger because these are higher. Extra actions not pertinent to the normal environment return the minimum reward over all environments (0 in the case of just coinflip environments and -100 in the case of composite environments including tiger), and are thus discouraged.
+The composite environment must have a standard ct-depth and a standard number of bits for actions, observations and rewards over all environments that it runs, because the agent takes these values at the start. So, the maximum values (over the tested environments) of these are taken. That is, in the case with just Coin Flip environments, we take just the standard values for Coin Flip. In the case of, say, Coin Flip and Tiger, we take the standard values for Tiger because these are higher. Extra actions not pertinent to the normal environment return the minimum reward over all environments (0 in the case of just Coin Flip environments and -100 in the case of composite environments including Tiger, for example), and are thus discouraged.
+
+As the code for composite environments is generic, we can experiment with running longer and more varied simulations (such as Coin Flip and Tiger, or Grid World and Kuhn Poker), as well as resetting the average reward when the environment changes. This would most likely help to understand the composite environments' effect on the \mac{} learning paradigm further.
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
