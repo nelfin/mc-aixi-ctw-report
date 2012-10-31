@@ -660,37 +660,25 @@ Whilst the CT depth and horizon chosen as parameters for pacman are far below th
 
 The results show that the agent clearly did not have enough cycles to learn optimal behaviours. The average reward shows the agent has considerable difficulty learning not to run into walls or ghosts in the first 600 cycles. However after this it seems to begin to have enough information in the context tree to predict suboptimal reward for running into walls in one or two directions; this causes the learning curve to become bumpy.
 
-\section{Composite Environment results}
+\section{Composite Environments}
 
-A composite environment is an environment which behaves like another environment
-for a certain number of time steps and then switches to behaving like another
-environment. In this way it becomes possible to examine whether the agent
-can develop transfer knowledge from one environment to another. It is also
-possible to examine whether the agent will remember the original environment
-when reintroduced to it, and therefore more quickly conform to optimal behaviour in that
-environment the second time it is introduced to it. The first test is to change
-between coinflip environments with different weighted coins. The second is to
-change from a coinflip environment to a tiger environment, and then back to the
-original coinflip environment.\\
-In the first case, the weights are chosen so that an action of 1 is optimal in the
-first and third environments and an action of 0 is optimal in the second environment.
-In the second case, the weight of the coin is chosen to be 1 in both instances of 
-coinflip, such that all observations in the first and third environments are heads.
-The tiger environment is standard in the sense that the chance that listening will
-return the correct observation about which door the tiger is behind is 0.85 and
-the chance that the gold will be behind the left door is equal to the chance that
-it is behind the right door. In both cases the environment switches at cycle 500 and then switches back at cycle 1000.\\
-The composite environment must have a
-standard ct-depth and a standard number of bits for actions, observations and 
-rewards over all environments
-that it runs, because the agent takes these values at the start. 
-So, the maximum values (over the 
-tested environments) of these are taken. That is, in the case with just coinflip
-environments, we take just the standard values for coinflip. In the case of
-coinflip and tiger, we take the standard values for tiger because these are higher.
-Extra actions not pertinent to the normal environment return the minimum reward
-over all environments (0 in the case of just coinflip environments and -100 in the 
-case of composite environments including tiger), and are thus discouraged.
+A composite environment is an environment which behaves like another environment for a certain number of time steps and then switches to behaving like another environment. In this way it becomes possible to examine whether the agent can develop transfer knowledge from one environment to another. It is also possible to examine whether the agent will remember the original environment when reintroduced to it, and therefore more quickly conform to optimal behaviour in that environment the second time it is introduced to it. The first test is to change between coinflip environments with different weighted coins. The second is to change from a coinflip environment to a tiger environment, and then back to the original coinflip environment.  
+
+In the first case (Figure \ref{fig:coin_comp101}), the weights are chosen so that an action of 1 is optimal in the first and third environments and an action of 0 is optimal in the second environment. In the second case, the weight of the coin is chosen to be 1 in both instances of  coinflip, such that all observations in the first and third environments are heads. The tiger environment is standard in the sense that the chance that listening will return the correct observation about which door the tiger is behind is 0.85 and the chance that the gold will be behind the left door is equal to the chance that it is behind the right door. In both cases the environment switches at cycle 500 and then switches back at cycle 1000.
+
+The composite environment must have a standard ct-depth and a standard number of bits for actions, observations and rewards over all environments that it runs, because the agent takes these values at the start. So, the maximum values (over the tested environments) of these are taken. That is, in the case with just coinflip environments, we take just the standard values for coinflip. In the case of coinflip and tiger, we take the standard values for tiger because these are higher. Extra actions not pertinent to the normal environment return the minimum reward over all environments (0 in the case of just coinflip environments and -100 in the case of composite environments including tiger), and are thus discouraged.
+
+\begin{figure}
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+        \addplot table {graph_data/coinflip_composite.plot.csv};
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  \caption{Composite coinflip environment $p=\{1;0;1\}$}
+  \label{fig:coin_comp101}
+\end{figure}
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
