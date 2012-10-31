@@ -425,25 +425,27 @@ Another graph with $\theta = 1$ is shown in Figure~\ref{fig:coin_1_0}. With $\th
 
 We also include in Figure~\ref{fig:coinflip_results} a graph of all results for \mac{} with $p$ ranging from 0 to 1 for the interested reader.
 
-\begin{figure}[h]
- \begin{center}
-   \begin{tikzpicture}
-     \begin{axis}[xlabel=Cycle,ylabel=Average reward,smooth,/pgfplots/no markers,legend style={
-                                              cells={anchor=east},
-                                              legend pos=outer north east,
-                                              },cycle list name=color list]
-       \foreach \p in {0, 2, 4, 6, 8} {
-         \addplot table {graph_data/coinflip_p=0_\p.plot.csv};
-         \addlegendentryexpanded{$p = 0.\p$};
-       }
-       \addplot table {graph_data/coinflip_p=1_0.plot.csv};
-       \addlegendentry{$p = 1.0$};
-     \end{axis}
-   \end{tikzpicture}
- \end{center}
- \caption{Coin flip results}
- \label{fig:coinflip_results}
-\end{figure}
+%\begin{figure}[h]
+% \begin{center}
+%   \begin{tikzpicture}
+%     \begin{axis}[xlabel=Cycle,ylabel=Average reward,smooth,/pgfplots/no markers,legend style={
+%                                              cells={anchor=east},
+%                                              legend pos=outer north east,
+%                                              },cycle list name=color list]
+%       \foreach \p in {0, 2, 4, 6, 8} {
+%         \addplot table {graph_data/coinflip_p=0_\p.plot.csv};
+%         \addlegendentryexpanded{$p = 0.\p$};
+%       }
+%       \addplot table {graph_data/coinflip_p=1_0.plot.csv};
+%       \addlegendentry{$p = 1.0$};
+%     \end{axis}
+%   \end{tikzpicture}
+% \end{center}
+% \caption{Coin flip results}
+% \label{fig:coinflip_results}
+%\end{figure}
+
+Note the discrepancy that the agent has difficulty correctly exploting p=0.8 or o=0.2, settling on 0.6 reward. This is likely caused by the extra depth of the context tree confusing the algorithm by asking it to store useless information, which in some sense `dilutes' the precision. This greatly increases the number of cycles required for convergence. p=1 or p=0 converge well because the sequence becomes completely deterministic, greatly reducing the difficulty required to predict the next bits of the sequence.
 
 \section{Tiger results}
 Tiger is a game where the agent chooses out of two doors. Each door has a 50\% chance to contain a moderate reward of 110, or contain a reward of 0. A reward of 99 is given for listening, which has an 85\% chance to correctly reveal (as an observation) the size of the reward behind the door. This is a non-deterministic environment. Tiger is an interesting environment because effective exploitation requires patience. Selecting a door immediately will result in a far lower expected reward than listening until 3 confirmations that a door does not contain the tiger (low reward). Because of this, the optimal action sequence is long, even though greedily picking a door immediately can result in high reward.
@@ -463,7 +465,7 @@ explore-decay & 0.999\\
 \end{center}
 \end{table}
 
-The CT depth was chosen to be 30 so as to be large enough to store several percept and reward sequences. The agent horizon was set to 4 in order to enable optimum play (listen 3 times then choose the door.
+The CT depth was chosen to be 30 so as to be large enough to store several percept and reward sequences. The agent horizon was set to 4 in order to enable optimum play (listen 3 times then choose the door. The exploration is quite low but decays slowly; this is to assist the agent in discovering that while listening has low immediate reward, it can increase future reward.
 
  \begin{figure}[h]
    \begin{center}
@@ -497,19 +499,19 @@ explore-decay & 0.99999\\
 \end{center}
 \end{table}
 
-These parameters are chosen such that the agent has enough depth in the CT to store the optimum strategy (depth 12), and will search a reasonable distance in the future (given the small environment).
+These parameters are chosen such that the agent has enough depth in the CT to store the optimum strategy (depth 12), and will search a reasonable distance in the future (given the small environment). The exploration was chosen to be low in order to promote early exploitation so the agent would find a good strategy quickly. The decay rate is set low to allow the agent to keep exploring in order to optimise strategies.
 
-\begin{figure}[h]
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{axis}[xlabel=Cycles,ylabel near ticks,ylabel=Average reward,smooth,/pgfplots/no markers]
-        \addplot table {graph_data/grid.plot.csv};
-      \end{axis}
-    \end{tikzpicture}
-  \end{center}
-  \caption{Grid world results}
-  \label{fig:grid_results}
-\end{figure}
+%\begin{figure}[h]
+%  \begin{center}
+%    \begin{tikzpicture}
+%      \begin{axis}[xlabel=Cycles,ylabel near ticks,ylabel=Average reward,smooth,/pgfplots/no markers]
+%        \addplot table {graph_data/grid.plot.csv};
+%      \end{axis}
+%    \end{tikzpicture}
+%  \end{center}
+%  \caption{Grid world results}
+%  \label{fig:grid_results}
+%\end{figure}
 The results for this experiment are particularly interesting because the graph shows the agent clearly wandering around lost for the first 4000 cycles, but then starting to correctly identify the better strategy, and the reward sharply increases. As shown, the agent strategy has clearly not converged yet and needs more time. The actions taken shows the agent clearly favouring sequences with RIGHT and DOWN, dramatically increasing the average reward. The average reward continues to increase but has not quite reached the optimum yet.
 
 \section{Biased Rock paper scissors results}
@@ -531,7 +533,7 @@ explore-decay & 0.999\\
 \label{tab:rps_params}
 \end{table}
 
-The CT depth is chosen such that 2 observation and reward pairs can be stored, which will enable optimal strategy. The agent horizon is 3 for similar reasoning, slightly longer than the horizon required for optimal strategy, to ensure that the agent isn't immediately unfairly biased towards optimal strategy.
+The CT depth is chosen such that 2 observation and reward pairs can be stored, which will enable optimal strategy. The agent horizon is 3 for similar reasoning, slightly longer than the horizon required for optimal strategy, to ensure that the agent isn't immediately unfairly biased towards optimal strategy. The exploration is set to be quite high with a slow decay to enforce some random play from the agent in order to evaluate all the different possible combinations.
 
 \begin{figure}[h]
   \begin{center}
@@ -569,7 +571,7 @@ explore-decay & 0.999999\\
 \end{table}
 
 This yielded an average reward per cycle that can be seen in
-Figure~\ref{fig:rps_results_ctw}, showing that the agent the agent performs
+Figure~\ref{fig:rps_results_ctw}, showing that the agent performs
 better than random play, but still does not achieve the optimal reward of 1.25
 per cycle.
 
@@ -603,7 +605,7 @@ explore-decay & 0.9999\\
 \end{center}
 \end{table}
 
-The CT depth was chosen in order to be slightly more than enough to play optimally. The horizon was chosen in order to enable optimal strategy. While this could possibly be set to 3 to make sure there is no unfair bias, this is reasonable because the maximum iterations per environment cycle are 2.
+The CT depth was chosen in order to be slightly more than enough to play optimally. The horizon was chosen in order to enable optimal strategy. While this could possibly be set to 3 to make sure there is no unfair bias, this is reasonable because the maximum iterations per environment cycle are 2. The exploration is set to be initially low and decay slowly in order to increase the agent's ability to learn the non-deterministic environment.
 
 \begin{figure}[h]
   \begin{center}
@@ -642,7 +644,7 @@ explore-decay & 0.99999\\
 \end{center}
 \end{table}
 
-Whilst the CT depth and horizon chosen as parameters for pacman are far below the sizes required to play optimally, searching the depth of an entire game would be computationally infeasible. The parameters were chosen in order to balance computational time required. The agent horizon of 4 is very small but can still enable pacman to learn some advantageous behaviours in the environment, such as not walking into the direction where a ghost can be seen in line of sight.
+Whilst the CT depth and horizon chosen as parameters for pacman are far below the sizes required to play optimally, searching the depth of an entire game would be computationally infeasible. The parameters were chosen in order to balance computational time required. The agent horizon of 4 is very small but can still enable pacman to learn some advantageous behaviours in the environment, such as not walking into the direction where a ghost can be seen in line of sight. The exploration rate was set low in order to make the agent try to exploit the environment early on. The decay is low so that the agent continues to explore for a long time.
 
 \begin{figure}
   \begin{center}
