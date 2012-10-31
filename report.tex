@@ -344,25 +344,25 @@ The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We
 \section{Coin flip results}
 Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is 1 with probability $\theta \in [0,1]$, else the reward is 0. For a regular coin, $\theta = 0.5$, and there is no dominant strategy. However, if $\theta \not = 0.5$, dominant strategies emerge ($\theta > 0.5 \Rightarrow $ predict 1, $\; \theta < 0.5 \Rightarrow $ predict 0). The variable $\theta$ is hidden from the agent.
 
-\begin{figure}[h]
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{axis}[xlabel=Cycle,ylabel=Average reward,smooth,/pgfplots/no markers,legend style={
-                                               cells={anchor=east},
-                                               legend pos=outer north east,
-                                               }]
-        \foreach \p in {0, 2, 4, 6, 8} {
-        \addplot table {graph_data/coinflip_p=0_\p.plot.csv};
-        \addlegendentryexpanded{$p = 0.\p$};
-        }
-        \addplot table {graph_data/coinflip_p=1_0.plot.csv};
-        \addlegendentry{$p = 1.0$};
-      \end{axis}
-    \end{tikzpicture}
-  \end{center}
-  \caption{Coin flip results}
-  \label{fig:coinflip_results}
-\end{figure}
+% \begin{figure}[h]
+%   \begin{center}
+%     \begin{tikzpicture}
+%       \begin{axis}[xlabel=Cycle,ylabel=Average reward,smooth,/pgfplots/no markers,legend style={
+%                                                cells={anchor=east},
+%                                                legend pos=outer north east,
+%                                                }]
+%         \foreach \p in {0, 2, 4, 6, 8} {
+%         \addplot table {graph_data/coinflip_p=0_\p.plot.csv};
+%         \addlegendentryexpanded{$p = 0.\p$};
+%         }
+%         \addplot table {graph_data/coinflip_p=1_0.plot.csv};
+%         \addlegendentry{$p = 1.0$};
+%       \end{axis}
+%     \end{tikzpicture}
+%   \end{center}
+%   \caption{Coin flip results}
+%   \label{fig:coinflip_results}
+% \end{figure}
 Another graph with $\theta = 1$ is shown in Figure \ref{fig:coin_1_0}. With $\theta = 1$, the maximum theoretical reward is $1$, with the strategy of picking 1 always. We can see that our implementation of \mac{} quickly converges to this strategy of picking 1 always, with the average reward approaching 1 (the maximum possible reward).
 
 
@@ -376,31 +376,31 @@ explore-decay & 0.999\\
 \hline
 \end{tabular}
 
-\begin{figure}[h]
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
-        \addplot table {graph_data/tiger.plot.csv};
-      \end{axis}
-    \end{tikzpicture}
-  \end{center}
-  \caption{Tiger results}
-  \label{fig:tiger_results}
-\end{figure}
+% \begin{figure}[h]
+%   \begin{center}
+%     \begin{tikzpicture}
+%       \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+%         \addplot table {graph_data/tiger.plot.csv};
+%       \end{axis}
+%     \end{tikzpicture}
+%   \end{center}
+%   \caption{Tiger results}
+%   \label{fig:tiger_results}
+% \end{figure}
 
 \section{Grid world results}
 
-\begin{figure}[h]
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
-        \addplot table {graph_data/grid.plot.csv};
-      \end{axis}
-    \end{tikzpicture}
-  \end{center}
-  \caption{Grid world results}
-  \label{fig:grid_results}
-\end{figure}
+% \begin{figure}[h]
+%   \begin{center}
+%     \begin{tikzpicture}
+%       \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+%         \addplot table {graph_data/grid.plot.csv};
+%       \end{axis}
+%     \end{tikzpicture}
+%   \end{center}
+%   \caption{Grid world results}
+%   \label{fig:grid_results}
+% \end{figure}
 
 \begin{tabular}{| r | l | }
 \hline
@@ -420,17 +420,17 @@ explore-decay & 0.999\\
 \hline
 \end{tabular}
 
-\begin{figure}[h]
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
-        \addplot table {graph_data/rps.plot.csv};
-      \end{axis}
-    \end{tikzpicture}
-  \end{center}
-  \caption{Biased RPS results}
-  \label{fig:rps_results}
-\end{figure}
+% \begin{figure}[h]
+%   \begin{center}
+%     \begin{tikzpicture}
+%       \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+%         \addplot table {graph_data/rps.plot.csv};
+%       \end{axis}
+%     \end{tikzpicture}
+%   \end{center}
+%   \caption{Biased RPS results}
+%   \label{fig:rps_results}
+% \end{figure}
 
 \section{Kuhn Poker results}
 In Kuhn Poker, the agent plays against a Nash Equillibruim AI, with gamma set to 0.5. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.\\\\
@@ -443,17 +443,17 @@ explore-decay & 0.9999\\
 \hline
 \end{tabular}
 
-\begin{figure}[h]
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
-        \addplot table {graph_data/kuhn.plot.csv};
-      \end{axis}
-    \end{tikzpicture}
-  \end{center}
-  \caption{Kuhn poker results}
-  \label{fig:kuhn_results}
-\end{figure}
+% \begin{figure}[h]
+%   \begin{center}
+%     \begin{tikzpicture}
+%       \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+%         \addplot table {graph_data/kuhn.plot.csv};
+%       \end{axis}
+%     \end{tikzpicture}
+%   \end{center}
+%   \caption{Kuhn poker results}
+%   \label{fig:kuhn_results}
+% \end{figure}
 
 \section{Pacman results}
 In Pacman\\\\
@@ -466,17 +466,17 @@ explore-decay & 0.99999\\
 \hline
 \end{tabular}
 
-\begin{figure}[h]
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
-        \addplot table {graph_data/pacman.plot.csv};
-      \end{axis}
-    \end{tikzpicture}
-  \end{center}
-  \caption{Pacman results}
-  \label{fig:pacman_results}
-\end{figure}
+% \begin{figure}[h]
+%   \begin{center}
+%     \begin{tikzpicture}
+%       \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+%         \addplot table {graph_data/pacman.plot.csv};
+%       \end{axis}
+%     \end{tikzpicture}
+%   \end{center}
+%   \caption{Pacman results}
+%   \label{fig:pacman_results}
+% \end{figure}
 
  \begin{center}
 \emph{Table 5.1 Number of problems where complete solutions were found}
