@@ -181,7 +181,11 @@ Here we have the entire context tree represented as an object, which is a glorif
 }
 \item{\texttt{update}
 
-    \texttt{update} is one of the most important methods in the entire CTW implementation. We recurse through the tree, starting from the node that calls this method, popping symbols from the end of the history until we reach a leaf; as in the CTW algorithm. When we do, we update the counts for the leaf based on the symbol that is passed to \texttt{update}, and then follow the branch back up the tree, using the equation given for $P_{w}$: \[ P_{w} = \frac{1}{2}P_{KT}(n) + \frac{1}{2}P^{0}P^{1}. \] % can someone check this against the literature?
+    \texttt{update} is one of the most important methods in the entire CTW implementation. We recurse through the tree, starting from the node that calls this method, popping symbols from the end of the history until we reach a leaf; as in the CTW algorithm. When we do, we update the counts for the leaf based on the symbol that is passed to \texttt{update}, and then follow the branch back up the tree, using the equation given for  $P_{w}$: \[ P_{w} = 
+     \begin{cases}
+    P_{KT}(n) &\text{for leaves}\\
+    \frac{1}{2}P_{KT}(n) + \frac{1}{2}P^{0}P^{1} &\text{otherwise}
+   \end{cases}  \]
 This method doesn't change the history, as we push the popped symbols back onto the stack when we're done with each call.
   }
 \item{\texttt{size}
