@@ -203,25 +203,31 @@ This method doesn't change the history, as we push the popped symbols back onto 
   }
 \item{\texttt{genRandomSymbols}
     
-    
+    This method utilises the following \texttt{genRandomSymbolsAndUpdate} method to make a string of random symbols on the history, utilising \texttt{revert} in order to remove the changes that the following method makes to the tree.
   }
 \item{\texttt{genRandomSymbolsAndUpdate}
     
+    As the name implies, this method uses the context-tree weights to form a random distribution, upon which it generates \texttt{bits} bits and pushes them to the given symbol list, and then updates the context-tree weightings.
   }
 \item{\texttt{logBlockProbability}
     
+    This is a simple getter method for the weighted probability of the root - which is the probability of the entire context tree.
   }
 \item{\texttt{nthHistorySymbol}
     
+    Again, this method is aptly named: it returns the $n$th most recent history symbol. (Of course, when it can't find a symbol back that far, it just returns \texttt{NULL} instead.)
   }
 \item{\texttt{depth, historySize, size}
     
+    These are simple getter methods for the private variables contained within a \texttt{ContextTree}.
   }
 \item{\texttt{predictNext}
     
+    This method uses the weighted context-tree to make an educated guess about what the next symbol may be. It predicts the probability of a 1 being the next symbol, then uses a random generator to figure out whether it should guess 1 or 0.
   }
-\item{\texttt{prettyPrint, prettyPrintNode, printHistory}
+\item{\texttt{prettyPrint, printHistory}
     
+    These methods are printing methods - \texttt{prettyPrint} uses the \texttt{prettyPrintNode} method from \texttt{CTNode} to recursively print the entire tree, indented by level; and \texttt{printHistory} just prints a single string of each symbol in the history, with spaces for separators.
   }
 \end{itemize}
 \section{Upper Confidence Tree}
