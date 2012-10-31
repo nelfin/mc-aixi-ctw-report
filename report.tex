@@ -354,6 +354,18 @@ explore-decay & 0.999\\
 
 \section{Grid world results}
 
+\begin{figure}[h]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+        \addplot table {graph_data/grid.plot.csv};
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  \caption{Grid world results}
+  \label{fig:grid_results}
+\end{figure}
+
 \begin{tabular}{| r | l | }
 \hline
 mc-simulations & 50\\
@@ -371,6 +383,19 @@ exploration & 0.1\\
 explore-decay & 0.999\\
 \hline
 \end{tabular}
+
+\begin{figure}[h]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+        \addplot table {graph_data/rps.plot.csv};
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  \caption{Biased RPS results}
+  \label{fig:rps_results}
+\end{figure}
+
 \section{Kuhn Poker results}
 In Kuhn Poker, the agent plays against a Nash Equillibruim AI, with gamma set to 0.5. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.\\\\
 The parameters used were:\\\\
@@ -381,6 +406,19 @@ exploration & 0.01\\
 explore-decay & 0.9999\\
 \hline
 \end{tabular}
+
+\begin{figure}[h]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+        \addplot table {graph_data/kuhn.plot.csv};
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  \caption{Kuhn poker results}
+  \label{fig:kuhn_results}
+\end{figure}
+
 \section{Pacman results}
 In Pacman\\\\
 The parameters used were:\\\\
@@ -392,23 +430,22 @@ explore-decay & 0.99999\\
 \hline
 \end{tabular}
 
+\begin{figure}[h]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+        \addplot table {graph_data/pacman.plot.csv};
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  \caption{Pacman results}
+  \label{fig:pacman_results}
+\end{figure}
+
  \begin{center}
 \emph{Table 5.1 Number of problems where complete solutions were found}
 \end{center}
 The parameters used were:
-\chapter{Extension}
-This is just a test figure, to see what happens with PGFPlots and such.
-\begin{figure}[h]
-\begin{center}
-  \begin{tikzpicture}
-    \begin{axis}[xlabel=Cycle,ylabel=Average reward,title={Coinflip $p=0.2$}]
-      \pgfplotstableread{graph_data/coinflip_p=0_2.plot.csv}\plotcsv
-      \addplot+[every mark/.append style={no markers},smooth] table
-      {\plotcsv};
-    \end{axis}
-  \end{tikzpicture}
-\end{center}
-\end{figure}
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
