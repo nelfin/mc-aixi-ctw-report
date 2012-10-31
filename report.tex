@@ -181,7 +181,11 @@ Here we have the entire context tree represented as an object, which is a glorif
 }
 \item{\texttt{update}
 
-    \texttt{update} is one of the most important methods in the entire CTW implementation. We recurse through the tree, starting from the node that calls this method, popping symbols from the end of the history until we reach a leaf; as in the CTW algorithm. When we do, we update the counts for the leaf based on the symbol that is passed to \texttt{update}, and then follow the branch back up the tree, using the equation given for $P_{w}$: \[ P_{w} = \frac{1}{2}P_{KT}(n) + \frac{1}{2}P^{0}P^{1}. \] % can someone check this against the literature?
+    \texttt{update} is one of the most important methods in the entire CTW implementation. We recurse through the tree, starting from the node that calls this method, popping symbols from the end of the history until we reach a leaf; as in the CTW algorithm. When we do, we update the counts for the leaf based on the symbol that is passed to \texttt{update}, and then follow the branch back up the tree, using the equation given for  $P_{w}$: \[ P_{w} = 
+     \begin{cases}
+    P_{KT}(n) &\text{for leaves}\\
+    \frac{1}{2}P_{KT}(n) + \frac{1}{2}P^{0}P^{1} &\text{otherwise}
+   \end{cases}  \]
 This method doesn't change the history, as we push the popped symbols back onto the stack when we're done with each call.
   }
 \item{\texttt{size}
@@ -309,7 +313,7 @@ Most of the Upper Confidence Tree (UCT) algorithm is implemented in the files \t
 	
 	The top level function for determining an action based on an agent's state. \texttt{search} forms the search tree as it searches. Using the \texttt{SearchNode::sample} function, \texttt{search} samples from the root multiple times to form the MCTS (Monte Carlo Tree Search) tree. This function also uses \texttt{ModelUndo} to save an agent before modifying it and it's CTW tree. It can then revert it back to it's previous state before the sampling run took place.
 	
-	After the tree has been explored sufficiently (\texttt{numSimulations}), the best action is determined by taking the maximum expected reward over all of the possible actions. This is best action is the one that search returns.
+	After the tree has been explored sufficiently (\texttt{numSimulations}), the best action is determined by taking the maximum expected reward over all of the possible actions. This best action is the one that search returns.
 }
 	
 \end{itemize}
@@ -321,7 +325,7 @@ The CTW tree is the primarmy prediction mechanism in the \mac{} model. The CTW i
 \subsection{Deterministic sequence prediction}
 Several simple sequences were given to the CTW tree, and the CTW tree was asked to continue the sequence. This can be seen in Figure \ref{tab:det_seq_pred}. We can see that the CTW tree is able to correctly predict the next bit, or multiple bits, in the sequence.
 
-\begin{figure}
+\begin{table}
 \bcen
 \bgroup
 \def\arraystretch{1.5}
@@ -338,7 +342,7 @@ Sequence & Prediction & Sequence & Prediction\\
 \ecen
 \caption{Some of the sequences given to the CTW tree, and the prediction of the next symbol.}
 \label{tab:det_seq_pred}
-\end{figure}
+\end{table}
 
 \subsection{Non deterministic sequence prediction}
 A partially non deterministic sequence was given to CTW for testing purposes. The sequence was given to CTW was of the form\\
@@ -369,7 +373,8 @@ S = x^{\text{obs}}_0,\; x^{\text{rew}}_0,\; x^{\text{act}}_1,\;\;\;...\;\;\;,x^{
 The CTW tree is then asked to predict which bit is the next in the sequence. The idea of this experiment is to determine if the CTW tree ``understands'' the rules of the game - if it understood, it would predict $x^{\text{rew}}_{3000} = (x^{\text{act}}_{3000} \land x^{\text{obs}}_{3000}) \lor (\lnot x^{\text{act}}_{3000} \land \lnot x^{\text{obs}}_{3000})$.
 
 The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We see that it correctly predicts the reward bit given the action and observation bits. This provides some verification that the implementation of the CTW tree is correct.
-\begin{figure}
+
+\begin{table}
 \bcen
 \bgroup
 \def\arraystretch{1.5}
@@ -382,7 +387,7 @@ The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We
 \ecen
 \caption{Predicted values for $x^{\text{rew}}_{3000}$}
 \label{tab:non_det_seq_pred}
-\end{figure}
+\end{table}
 
 \section{Coin flip results}
 
@@ -404,6 +409,7 @@ The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We
 Figure \ref{fig:coin_0_2} shows the results for $\theta=0.2$. The theoretical best strategy for this environment would be to predict $0$ always, and gain a reward of $0.8$. We can see that our implementation of \mac{} acheives better than a random player (who would receive an average reward of 0.5) but does not acheive the maximum theoretical average reward in 8000 cycles.
 
 Another graph with $\theta = 1$ is shown in Figure \ref{fig:coin_1_0}. With $\theta = 1$, the maximum theoretical reward is $1$, with the strategy of picking 1 always. We can see that our implementation of \mac{} quickly converges to this strategy of picking 1 always, with the average reward approaching 1.
+
 \begin{figure}
 \centering
  \begin{tikzpicture}
@@ -419,28 +425,30 @@ Another graph with $\theta = 1$ is shown in Figure \ref{fig:coin_1_0}. With $\th
 
 We also include in Figure \ref{fig:coinflip_results} a graph of all results for \mac{} with $p$ ranging from 0 to 1 for the interested reader.
 
-%\begin{figure}[h]
- % \begin{center}
-%    \begin{tikzpicture}
-%      \begin{axis}[xlabel=Cycle,ylabel=Average reward,smooth,/pgfplots/no markers,legend style={
-%                                               cells={anchor=east},
-%                                               legend pos=outer north east,
-%                                               },cycle list name=color list]
-%        \foreach \p in {0, 2, 4, 6, 8} {
-%          \addplot table {graph_data/coinflip_p=0_\p.plot.csv};
-%          \addlegendentryexpanded{$p = 0.\p$};
-%        }
-%        \addplot table {graph_data/coinflip_p=1_0.plot.csv};
-%        \addlegendentry{$p = 1.0$};
-%      \end{axis}
-%    \end{tikzpicture}
-%  \end{center}
-%  \caption{Coin flip results}
-%  \label{fig:coinflip_results}
-%\end{figure}
+\begin{figure}[h]
+ \begin{center}
+   \begin{tikzpicture}
+     \begin{axis}[xlabel=Cycle,ylabel=Average reward,smooth,/pgfplots/no markers,legend style={
+                                              cells={anchor=east},
+                                              legend pos=outer north east,
+                                              },cycle list name=color list]
+       \foreach \p in {0, 2, 4, 6, 8} {
+         \addplot table {graph_data/coinflip_p=0_\p.plot.csv};
+         \addlegendentryexpanded{$p = 0.\p$};
+       }
+       \addplot table {graph_data/coinflip_p=1_0.plot.csv};
+       \addlegendentry{$p = 1.0$};
+     \end{axis}
+   \end{tikzpicture}
+ \end{center}
+ \caption{Coin flip results}
+ \label{fig:coinflip_results}
+\end{figure}
 
 \section{Tiger results}
-Tiger is a game where the agent chooses out of two doors. Each door has a 50\% chance to contain a moderate reward of 110, or contain a reward of 0. A reward of 99 is given for listening, which has an 85\% chance to correctly reveal (as an observation) the size of the reward behind the door. This is a non-deterministic environment. Tiger is an interesting environment because effective exploitation requires patience. Selecting a door immediately will result in a far lower expected reward than listening until 3 confirmations that a door does not contain the tiger (low reward). Because of this, the optimal action sequence is long, even though greedily picking a door immediately can result in high reward.\\\\
+Tiger is a game where the agent chooses out of two doors. Each door has a 50\% chance to contain a moderate reward of 110, or contain a reward of 0. A reward of 99 is given for listening, which has an 85\% chance to correctly reveal (as an observation) the size of the reward behind the door. This is a non-deterministic environment. Tiger is an interesting environment because effective exploitation requires patience. Selecting a door immediately will result in a far lower expected reward than listening until 3 confirmations that a door does not contain the tiger (low reward). Because of this, the optimal action sequence is long, even though greedily picking a door immediately can result in high reward.
+
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{| r | l | }
 \hline
@@ -450,10 +458,11 @@ agent-horizon & 4\\
 exploration & 0.01\\
 explore-decay & 0.999\\
 \hline
-\end{tabular}\\
-\vspace{0.5mm}
-Table 4.3: The parameters used in the Tiger environment.
+\end{tabular}
+\caption{The parameters used in the Tiger environment.}
 \end{center}
+\end{table}
+
 The CT depth was chosen to be 30 so as to be large enough to store several percept and reward sequences. The agent horizon was set to 4 in order to enable optimum play (listen 3 times then choose the door.
 
  \begin{figure}[h]
@@ -467,10 +476,13 @@ The CT depth was chosen to be 30 so as to be large enough to store several perce
    \caption{Tiger results}
    \label{fig:tiger_results}
  \end{figure}
+
 The initial learning shows a steep curve, and the agent learns after 500 cycles that listening is gives safe reward (as a reward of 99 is better than picking a random door resulting in an average reward of 55). From this point onwards the agent seems to begin to notice the correlation between the percept provided by listen and the reward given by a door, and there is another small spike. The agent has likely had insufficient time to learn, so the reward has not converged, and is still far from the theoretical optimum of 107 average reward. This is caused by the difficulty in learning the observation reward sequence in the CTW; as the number of reward bits is 7, CTW learning takes a long time.
 
 \section{Grid world results}
-Grid world is a world where a blind agent (never given any observation) in a 4x4 grid needs to reach the bottom right corner, which will grant a reward of 1. All other rewards are 0. Moving outside the grid returns the agent back to the nearest square inside the grid. Once reaching the bottom right corner, the agent is teleported to a random other square in the grid. Note that under the specification, the agent may be teleported to the bottom right corne. The agent will not receive extra reward for this, but has an advantage in that either RIGHT or DOWN will result in an immediate reward. The environment is non-deterministic, however, contains an optimal sequence of moves that is guaranteed a reward within 6 moves, namely RIGHT, DOWN repeated 3 times, which would give an average reward of 0.33.\\\\
+Grid world is a world where a blind agent (never given any observation) in a 4x4 grid needs to reach the bottom right corner, which will grant a reward of 1. All other rewards are 0. Moving outside the grid returns the agent back to the nearest square inside the grid. Once reaching the bottom right corner, the agent is teleported to a random other square in the grid. Note that under the specification, the agent may be teleported to the bottom right corne. The agent will not receive extra reward for this, but has an advantage in that either RIGHT or DOWN will result in an immediate reward. The environment is non-deterministic, however, contains an optimal sequence of moves that is guaranteed a reward within 6 moves, namely RIGHT, DOWN repeated 3 times, which would give an average reward of 0.33. The parameters were chosen such that the agent has enough depth in the CT to store the optimum strategy (depth 12), and will search a reasonable distance in the future (given the small environment).
+
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{| r | l | }
 \hline
@@ -480,27 +492,30 @@ agent-horizon & 4\\
 exploration & 0.01\\
 explore-decay & 0.99999\\
 \hline
-\end{tabular}\\
-\vspace{0.5mm}
-Table 4.4: The parameters used in the Grid world environment.
+\end{tabular}
+\caption{The parameters used in the Grid world environment.}
 \end{center}
+\end{table}
+
 These parameters are chosen such that the agent has enough depth in the CT to store the optimum strategy (depth 12), and will search a reasonable distance in the future (given the small environment).
 
-%\begin{figure}[h]
-%   \begin{center}
-%     \begin{tikzpicture}
-%       \begin{axis}[xlabel=Cycles,ylabel near ticks,ylabel=Average reward,smooth,/pgfplots/no markers]
-%         \addplot table {graph_data/grid.plot.csv};
-%       \end{axis}
-%     \end{tikzpicture}
-%   \end{center}
-%   \caption{Grid world results}
-%   \label{fig:grid_results}
-% \end{figure}
-The results for this experiment are particularly interesting because the graph shows the agent clearly wandering around lost for the first 4000 cycles, but then starting to correctly identify the better strategy, and the reward sharply increases. As shown, the agent strategy has clearly not converged yet and needs more time. The actions taken shows the agent clearly favouring sequences with RIGHT and DOWN, dramatically increasing the average reward. The average reward continues to increase by has not quite reached optimum yet.
+\begin{figure}[h]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[xlabel=Cycles,ylabel near ticks,ylabel=Average reward,smooth,/pgfplots/no markers]
+        \addplot table {graph_data/grid.plot.csv};
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  \caption{Grid world results}
+  \label{fig:grid_results}
+\end{figure}
+The results for this experiment are particularly interesting because the graph shows the agent clearly wandering around lost for the first 4000 cycles, but then starting to correctly identify the better strategy, and the reward sharply increases. As shown, the agent strategy has clearly not converged yet and needs more time. The actions taken shows the agent clearly favouring sequences with RIGHT and DOWN, dramatically increasing the average reward. The average reward continues to increase but has not quite reached the optimum yet.
 
 \section{Biased Rock paper scissors results}
-In Biased Rock Paper Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias. The environment is non-deterministic. Note that optimum play on this environment would involve the agent playing scissors until a loss, then playing paper directly afterwards. \\\\
+In Biased Rock Paper Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias. The environment is non-deterministic. Note that optimum play on this environment would involve the agent playing scissors until a loss, then playing paper directly afterwards.
+
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{| r | l | }
 \hline
@@ -510,11 +525,13 @@ agent-horizon & 3\\
 exploration & 0.1\\
 explore-decay & 0.999\\
 \hline
-\end{tabular}\\
-\vspace{0.5mm}
-Table 4.5: The parameters used in the RPS environment.
+\end{tabular}
+\caption{The parameters used in the RPS environment.}
 \end{center}
+\end{table}
+
 The CT depth is chosen such that 2 observation and reward pairs can be stored, which will enable optimal strategy. The agent horizon is 3 for similar reasoning, slightly longer than the horizon required for optimal strategy, to ensure that the agent isn't immediately unfairly biased towards optimal strategy.
+
 \begin{figure}[h]
   \begin{center}
     \begin{tikzpicture}
@@ -563,7 +580,9 @@ per cycle.
 \end{figure}
 
 \section{Kuhn Poker results}
-In Kuhn Poker, the agent plays against a Nash Equilibrium AI, with gamma set to 0.5. More details about the environment can be found in \cite{kuhn}. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.\\\\
+In Kuhn Poker, the agent plays against a Nash Equilibrium AI, with gamma set to 0.5. More details about the environment can be found in \cite{kuhn}. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.
+
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{| r | l | }
 \hline
@@ -573,10 +592,11 @@ agent-horizon & 2\\
 exploration & 0.01\\
 explore-decay & 0.9999\\
 \hline
-\end{tabular}\\
-\vspace{0.5mm}
-Table 4.6: The parameters used in the Kuhn Poker environment.
+\end{tabular}
+\caption{The parameters used in the Kuhn Poker environment.}
 \end{center}
+\end{table}
+
 The CT depth was chosen in order to be slightly more than enough to play optimally. The horizon was chosen in order to enable optimal strategy. While this could possibly be set to 3 to make sure there is no unfair bias, this is reasonable because the maximum iterations per environment cycle are 2.
 
 \begin{figure}[h]
@@ -594,9 +614,14 @@ The CT depth was chosen in order to be slightly more than enough to play optimal
 Kuhn Poker initially performs poorly against the Nash player, losing significantly more often than winning. However, interestingly, within 800 cycles, the agent begins to learns how to play the basic game (such as betting when seeing a king and passing with a jack), seen by the steep improvement which cuts out just above 1.87. Some finer points are learned up to 4000 cycles, possibly such as bluffing with a queen, reaching an average reward of 1.9. However, the agent does not have enough time to start learning how to exploit the Nash player and still loses more times than it wins.
 
 \section{Pacman results}
-In partially observable Pacman, the agent plays in a maze, getting reward for consuming food but losing reward for running into walls and getting eaten by ghosts, according to the classical Pacman game. However, the agent cannot see the entire map, with a 16 bit percept based on 4 bits for line of sight for food, 3  bits for smelling food (based on manhattan distances of 2, 3 and 4), 4 bits for line of sight of ghosts, and finally 1 bit for the power pill. The environment is non-deterministic because the ghosts move randomly if not chasing pacman, and food is randomly allocated.\\\\
-Several assumptions were made on top of the specification.  While under the influence of the power pill, the agent is able to eat ghosts instead. Note that there is no reward given for this, unlike the classic pacman game. Ghosts also do not respawn, differing from traditional pacman. The effect this has is the agent should learn that if it eats a power pill, a good strategy is to try to eat ghosts, which will maximise future reward. However, given the limitations of balancing search size against computational limits, it is unlikely that this will be seen to a large degree.\\\\
+
+In partially observable Pacman, the agent plays in a maze, getting reward for consuming food but losing reward for running into walls and getting eaten by ghosts, according to the classical Pacman game. However, the agent cannot see the entire map, with a 16 bit percept based on 4 bits for line of sight for food, 3  bits for smelling food (based on manhattan distances of 2, 3 and 4), 4 bits for line of sight of ghosts, and finally 1 bit for the power pill. The environment is non-deterministic because the ghosts move randomly if not chasing pacman, and food is randomly allocated.
+
+Several assumptions were made on top of the specification.  While under the influence of the power pill, the agent is able to eat ghosts instead. Note that there is no reward given for this, unlike the classic pacman game. Ghosts also do not respawn, differing from traditional pacman. The effect this has is the agent should learn that if it eats a power pill, a good strategy is to try to eat ghosts, which will maximise future reward. However, given the limitations of balancing search size against computational limits, it is unlikely that this will be seen to a large degree.
+
 The rewards were more complicated because the agent can trigger multiple events with one action and thus receive multiple rewards. A reward of -60 was given for running intot a ghost, -10 for a wall, -1 for moving, 10 for eating a pellet and 100 for finishing all pellets. Multiple events had their rewards added together, and 71 was added to the total to ensure the reward remained positive. Ghosts will do a depth first search on possible moves in order to find pacman, and if he is within 5 tiles, they will agressively pursue him for 10 moves, after which they will forget about him for 10 moves. Ghosts do not flee from pacman with a power pill.
+
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{| r | l | }
 \hline
@@ -606,12 +631,14 @@ agent-horizon & 4\\
 exploration & 0.01\\
 explore-decay & 0.99999\\
 \hline
-\end{tabular}\\
-\vspace{0.5mm}
-Table 4.7: The parameters used in the Pacman environment.
+\end{tabular}
+\caption{The parameters used in the Pacman environment.}
 \end{center}
+\end{table}
+
 Whilst the CT depth and horizon chosen as parameters for pacman are far below the sizes required to play optimally, searching the depth of an entire game would be computationally infeasible. The parameters were chosen in order to balance computational time required. The agent horizon of 4 is very small but can still enable pacman to learn some advantageous behaviours in the environment, such as not walking into the direction where a ghost can be seen in line of sight.
-\begin{figure}[h]
+
+\begin{figure}
   \begin{center}
     \begin{tikzpicture}
       \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
