@@ -49,9 +49,9 @@
 \textsc{Assignment 2}\\
 \vspace{1.0cm}
 \hrule
-vspace{1.4cm}
+\vspace{1.4cm}
 \vfill
-Bottom of the page
+%Bottom of the page
 {\large \today} \\[0.5cm]
 
 \begin{tabular}{ccccc}
@@ -153,10 +153,10 @@ Here we have the entire context tree represented as an object, which is a glorif
 \subsection{Methods}
 \subsubsection{\texttt{CTNode}}
 \begin{itemize}
-\item{\texttt{logProbWeighted, logProbEstimated, visits, child}
+\item{\texttt{logProbWeighted, logProbEstimated, visits, child}}
 
     These methods are simply defined. Since the values stored in variables such as \texttt{m\_log\_prob\_weighted} are declared privately, it is required to use a public method to get them. \texttt{visits} grabs the sum of the counts for the child nodes - the number of times that we have seen this particular node in our travels; and \texttt{child} takes a symbol, and returns a pointer to the correct (left or right) child.
-  }
+}
 \item{\texttt{update}
 
     \texttt{update} is one of the most important methods in the entire CTW implementation. We recurse through the tree, starting from the node that calls this method, popping symbols from the end of the history until we reach a leaf; as in the CTW algorithm. When we do, we update the counts for the leaf based on the symbol that is passed to \texttt{update}, and then follow the branch back up the tree, using the equation given for $P_{w}$: \[ P_{w} = \frac{1}{2}P_{KT}(n) + \frac{1}{2}P^{0}P^{1}. \] % can someone check this against the literature?
@@ -298,7 +298,11 @@ The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We
 \end{figure}
 
 \section{Coin flip results}
-Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is one with probability $\theta \in [0,1]$, else the reward is 0.
+Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is 1 with probability $\theta \in [0,1]$, else the reward is 0. For a regular coin, $\theta = 0.5$, and there is no dominant strategy. However, if $\theta \not = 0.5$, dominant strategies emerge ($\theta > 0.5 \Rightarrow $ predict 1, $\; \theta < 0.5 \Rightarrow $ predict 0). The variable $\theta$ is hidden from the agent.
+
+
+
+
 \section{Tiger results}
 The parameters used were:\\\\
 \begin{tabular}{| r | l | }
@@ -353,18 +357,18 @@ explore-decay & 0.99999\\
 \end{center}
 The parameters used were:
 \chapter{Extension}
-% This is just a test figure, to see what happens with PGFPlots and such.
-%\begin{figure}[h]
-%\begin{center}
-%  \begin{tikzpicture}
-%    \begin{axis}[xlabel=Cycle,ylabel=Average reward,title={Coinflip $p=0.0$}]
-%      \pgfplotstableread{plot.csv}\plotcsv
-%      \addplot+[every mark/.append style={no markers},smooth] table
-%      {\plotcsv};
-%    \end{axis}
-%  \end{tikzpicture}
-%\end{center}
-%\end{figure}
+This is just a test figure, to see what happens with PGFPlots and such.
+\begin{figure}[h]
+\begin{center}
+  \begin{tikzpicture}
+    \begin{axis}[xlabel=Cycle,ylabel=Average reward,title={Coinflip $p=0.2$}]
+      \pgfplotstableread{graph_data/coinflip_p=0_2.plot.csv}\plotcsv
+      \addplot+[every mark/.append style={no markers},smooth] table
+      {\plotcsv};
+    \end{axis}
+  \end{tikzpicture}
+\end{center}
+\end{figure}
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
