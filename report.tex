@@ -316,10 +316,12 @@ Coin flip is a simple environment where the agent is given a reward of 1 for cor
                                                cells={anchor=east},
                                                legend pos=outer north east,
                                                }]
-        \foreach \p in {0_0, 0_2, 0_4, 0_6, 0_8, 1_0} {
-        \addplot table {graph_data/coinflip_p=\p.plot.csv};
-        \addlegendentryexpanded{$p = \p$}
+        \foreach \p in {0, 2, 4, 6, 8} {
+        \addplot table {graph_data/coinflip_p=0_\p.plot.csv};
+        \addlegendentryexpanded{$p = 0.\p$};
         }
+        \addplot table {graph_data/coinflip_p=1_0.plot.csv};
+        \addlegendentry{$p = 1.0$};
       \end{axis}
     \end{tikzpicture}
   \end{center}
