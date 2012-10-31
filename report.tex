@@ -181,7 +181,11 @@ Here we have the entire context tree represented as an object, which is a glorif
 }
 \item{\texttt{update}
 
-    \texttt{update} is one of the most important methods in the entire CTW implementation. We recurse through the tree, starting from the node that calls this method, popping symbols from the end of the history until we reach a leaf; as in the CTW algorithm. When we do, we update the counts for the leaf based on the symbol that is passed to \texttt{update}, and then follow the branch back up the tree, using the equation given for $P_{w}$: \[ P_{w} = \frac{1}{2}P_{KT}(n) + \frac{1}{2}P^{0}P^{1}. \] % can someone check this against the literature?
+    \texttt{update} is one of the most important methods in the entire CTW implementation. We recurse through the tree, starting from the node that calls this method, popping symbols from the end of the history until we reach a leaf; as in the CTW algorithm. When we do, we update the counts for the leaf based on the symbol that is passed to \texttt{update}, and then follow the branch back up the tree, using the equation given for  $P_{w}$: \[ P_{w} = 
+     \begin{cases}
+    P_{KT}(n) &\text{for leaves}\\
+    \frac{1}{2}P_{KT}(n) + \frac{1}{2}P^{0}P^{1} &\text{otherwise}
+   \end{cases}  \]
 This method doesn't change the history, as we push the popped symbols back onto the stack when we're done with each call.
   }
 \item{\texttt{size}
@@ -309,7 +313,7 @@ Most of the Upper Confidence Tree (UCT) algorithm is implemented in the files \t
 	
 	The top level function for determining an action based on an agent's state. \texttt{search} forms the search tree as it searches. Using the \texttt{SearchNode::sample} function, \texttt{search} samples from the root multiple times to form the MCTS (Monte Carlo Tree Search) tree. This function also uses \texttt{ModelUndo} to save an agent before modifying it and it's CTW tree. It can then revert it back to it's previous state before the sampling run took place.
 	
-	After the tree has been explored sufficiently (\texttt{numSimulations}), the best action is determined by taking the maximum expected reward over all of the possible actions. This is best action is the one that search returns.
+	After the tree has been explored sufficiently (\texttt{numSimulations}), the best action is determined by taking the maximum expected reward over all of the possible actions. This best action is the one that search returns.
 }
 	
 \end{itemize}
@@ -582,7 +586,7 @@ per cycle.
 \end{figure}
 
 \section{Kuhn Poker results}
-In Kuhn Poker, the agent plays against a Nash Equilibrium AI, with gamma set to 0.5. More details about the environment can be found in Kuhn \cite{kuhn}. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.
+In Kuhn Poker, the agent plays against a Nash Equilibrium AI, with gamma set to 0.5. More details about the environment can be found in \cite{kuhn}. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.
 
 \begin{table}[h]
 \begin{center}
