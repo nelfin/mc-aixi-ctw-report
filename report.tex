@@ -146,7 +146,7 @@ In addition to this, some configurations have parameters that are specific to th
     \end{itemize}
 \item composite.conf
     \begin{itemize}
-        \item \texttt{environmentN}: Specifies the $N^{\text{th}}$ environment, where $0 \leq N \leq 10$. The value of this parameter is an integer $\leq 10$, and indicates which environment environmentN represents.
+        \item \texttt{environmentN}: Specifies the $N^{\text{th}}$ environment, where $0 \leq N \leq 10$. The value of this parameter is an integer $\leq 10$, and indicates which environment \texttt{environmentN} represents.
         \item \texttt{startN}: Specifies the time step that at which the $N^{\text{th}}$ environment starts, where $0 \leq N \leq 10$.
         \item Paremeters required for the environemnts $1..N$ specified in \texttt{environment.cpp}.
     \end{itemize}
@@ -155,7 +155,7 @@ In addition to this, some configurations have parameters that are specific to th
 \chapter{MC-AIXI-CTW Implementation}
 \section{Design Choices}
 
-We have implemented MC-AIXI-CTW in the C++ coding language, which has a number of benefits. Firstly, C++ is a better option for implementation than C or another imperative language, as objects allow us to pass recursive and enumerated structures between processes. Secondly, C++ is a much more low-level language than any other object-oriented language, which allows us to perform much more optimal processing; and dynamic memory allocation means that we can ensure that our program doesn't take up more memory than we need it to, so that it will overall take less time to run.
+We have implemented MC-AIXI-CTW in the C++ programming language, which has a number of benefits. Firstly, C++ is a better option for implementation than C or another imperative language, as objects allow us to pass recursive and enumerated structures between processes. Secondly, C++ is a low-level language - more than any other object-oriented language, which allows us to process more optimally; and dynamic memory allocation means that we can ensure that our program doesn't take up more memory than we need it to, so that it will take less time to run overall.
 
 \section{Context Tree Weighting}
 The algorithm for implementing context-tree weighting (CTW) mainly consists of the methods and objects given in the file \texttt{predict.cpp}, along with its corresponding \texttt{.hpp} file. We run through these from the beginning of the file to its end.  
