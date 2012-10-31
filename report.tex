@@ -146,7 +146,7 @@ In addition to this, some configurations have parameters that are specific to th
     \end{itemize}
 \item composite.conf
     \begin{itemize}
-        \item \texttt{environmentN}: Specifies the $N^{\text{th}}$ environment, where $0 \leq N \leq 10$. The value of this parameter is an integer $\leq 10$, and indicates which environment environmentN represents.
+        \item \texttt{environmentN}: Specifies the $N^{\text{th}}$ environment, where $0 \leq N \leq 10$. The value of this parameter is an integer $\leq 10$, and indicates which environment \texttt{environmentN} represents.
         \item \texttt{startN}: Specifies the time step that at which the $N^{\text{th}}$ environment starts, where $0 \leq N \leq 10$.
         \item Paremeters required for the environemnts $1..N$ specified in \texttt{environment.cpp}.
     \end{itemize}
@@ -155,7 +155,7 @@ In addition to this, some configurations have parameters that are specific to th
 \chapter{MC-AIXI-CTW Implementation}
 \section{Design Choices}
 
-We have implemented MC-AIXI-CTW in the C++ coding language, which has a number of benefits. Firstly, C++ is a better option for implementation than C or another imperative language, as objects allow us to pass recursive and enumerated structures between processes. Secondly, C++ is a much more low-level language than any other object-oriented language, which allows us to perform much more optimal processing; and dynamic memory allocation means that we can ensure that our program doesn't take up more memory than we need it to, so that it will overall take less time to run.
+We have implemented MC-AIXI-CTW in the C++ programming language, which has a number of benefits. Firstly, C++ is a better option for implementation than C or another imperative language, as objects allow us to pass recursive and enumerated structures between processes. Secondly, C++ is a low-level language - more than any other object-oriented language, which allows us to process more optimally; and dynamic memory allocation means that we can ensure that our program doesn't take up more memory than we need it to, so that it will take less time to run overall.
 
 \section{Context Tree Weighting}
 The algorithm for implementing context-tree weighting (CTW) mainly consists of the methods and objects given in the file \texttt{predict.cpp}, along with its corresponding \texttt{.hpp} file. We run through these from the beginning of the file to its end.  
@@ -164,7 +164,7 @@ The algorithm for implementing context-tree weighting (CTW) mainly consists of t
 \begin{itemize}
 \item{\texttt{CTNode}
 
-This object represents a node in the context tree; and so it needs to store both the Laplacian estimate of the probability, along with the weight given to it by the actual CTW algorithm. For mathematical stability, we store these floating-point numbers as logarithms, so we can just add them instead of multiplying them. In addition, it has a 2-array of pointers to its left and right child, and it stores the counts for these nodes in the context of the history (which is also required for the CTW algorithm).
+This object represents a node in the context tree; so it needs to store both the Laplacian estimate of the probability, along with the weight given to it by the actual CTW algorithm. For mathematical stability, we store these floating-point numbers as logarithms, so we can add them instead of multiplying them. In addition, it has a pair of pointers to its left and right child, and it stores the counts for these nodes in the context of the history (which is also required for the CTW algorithm).
   }
 \item{\texttt{ContextTree}
 
@@ -282,7 +282,7 @@ Most of the Upper Confidence Tree (UCT) algorithm is implemented in the files \t
 	
 	\item{\texttt{sample}
 	
-	Performs a trial run through this node, and through it's children. \texttt{sample} calculates the expected reward along the way, which updates the expected score (\texttt{m\_mean}) value for \texttt{selectAction}. This function generates actions to take as it travels down the tree using the CTW tree (\texttt{agent::genPerceptAndUpdate} and \texttt{agent::modelUpdate}).
+	Performs a trial run through this node, and through its children. \texttt{sample} calculates the expected reward along the way, which updates the expected score (\texttt{m\_mean}) value for \texttt{selectAction}. This function generates actions to take as it travels down the tree using the CTW tree (\texttt{agent::genPerceptAndUpdate} and \texttt{agent::modelUpdate}).
 	
 	If \texttt{SearchNode} is a chance node, it generates an observation and reward from the CTW tree, and continues down through \texttt{SearchNode}'s children. If it is a decision node, it uses \texttt{SelectAction} to choose an action. On the first visit, it uses the \texttt{playout} function to determine a reward.
 	}
@@ -311,7 +311,7 @@ Most of the Upper Confidence Tree (UCT) algorithm is implemented in the files \t
 \begin{itemize}
 \item{\texttt{search}
 	
-	The top level function for determining an action based on an agent's state. \texttt{search} forms the search tree as it searches. Using the \texttt{SearchNode::sample} function, \texttt{search} samples from the root multiple times to form the MCTS (Monte Carlo Tree Search) tree. This function also uses \texttt{ModelUndo} to save an agent before modifying it and it's CTW tree. It can then revert it back to it's previous state before the sampling run took place.
+	The top level function for determining an action based on an agent's state. \texttt{search} forms the search tree as it searches. Using the \texttt{SearchNode::sample} function, \texttt{search} samples from the root multiple times to form the MCTS (Monte Carlo Tree Search) tree. This function also uses \texttt{ModelUndo} to save an agent before modifying it and its CTW tree. It can then revert it back to its previous state before the sampling run took place.
 	
 	After the tree has been explored sufficiently (\texttt{numSimulations}), the best action is determined by taking the maximum expected reward over all of the possible actions. This best action is the one that search returns.
 }
@@ -365,7 +365,7 @@ r_\text{act}, r_\text{obs} \text{ are random bits }
 
 The idea of this sequence $S$ is to simulate a coinflip environment history sequence. The random bits $x^{\text{obs}}_i$ and $x^{\text{act}}_i$ simulate random coin flips, and the reward bit $x^{\text{act}}_i$ compares them. The action bit $x^{\text{act}}_i$ is random in this sequence.
 
-A sequence of this type with size ~9000 (3000 iterations) is given to the CTW tree, up to the point
+A sequence of this type with size  $\sim 9000$ (3000 iterations) is given to the CTW tree, up to the point
 
 \[
 S = x^{\text{obs}}_0,\; x^{\text{rew}}_0,\; x^{\text{act}}_1,\;\;\;...\;\;\;,x^{\text{act}}_{3000},\;x^{\text{obs}}_{3000}.
@@ -444,7 +444,7 @@ Another graph with $\theta = 1$ is shown in Figure~\ref{fig:coin_1_0}. With $\th
 \label{fig:coinflip_results}
 \end{figure}
 
-We also include in Figure~\ref{fig:coinflip_results} a graph of all results for \mac{} with $p$ ranging from 0 to 1 for the interested reader. Note the discrepancy that the agent has difficulty correctly exploting p=0.8 or o=0.2, settling on 0.6 reward. This is likely caused by the extra depth of the context tree confusing the algorithm by asking it to store useless information, which in some sense `dilutes' the precision. This greatly increases the number of cycles required for convergence. p=1 or p=0 converge well because the sequence becomes completely deterministic, greatly reducing the difficulty required to predict the next bits of the sequence.
+We also include in Figure~\ref{fig:coinflip_results} a graph of all results for \mac{} with $p$ ranging from 0 to 1. Note the discrepancy that the agent has difficulty correctly exploting p=0.8 or o=0.2, settling on 0.6 reward. This is likely caused by the extra depth of the context tree confusing the algorithm by asking it to store useless information, which in some sense `dilutes' the precision. This greatly increases the number of cycles required for convergence. p=1 or p=0 converge well because the sequence becomes completely deterministic, greatly reducing the difficulty required to predict the next bits of the sequence.
 
 \section{Tiger results}
 Tiger is a game where the agent chooses out of two doors. Each door has a 50\% chance to contain a moderate reward of 110, or contain a reward of 0. A reward of 99 is given for listening, which has an 85\% chance to correctly reveal (as an observation) the size of the reward behind the door. This is a non-deterministic environment. Tiger is an interesting environment because effective exploitation requires patience. Selecting a door immediately will result in a far lower expected reward than listening until 3 confirmations that a door does not contain the tiger (low reward). Because of this, the optimal action sequence is long, even though greedily picking a door immediately can result in high reward.
@@ -481,7 +481,7 @@ The CT depth was chosen to be 30 so as to be large enough to store several perce
 The initial learning shows a steep curve, and the agent learns after 500 cycles that listening is gives safe reward (as a reward of 99 is better than picking a random door resulting in an average reward of 55). From this point onwards the agent seems to begin to notice the correlation between the percept provided by listen and the reward given by a door, and there is another small spike. The agent has likely had insufficient time to learn, so the reward has not converged, and is still far from the theoretical optimum of 107 average reward. This is caused by the difficulty in learning the observation reward sequence in the CTW; as the number of reward bits is 7, CTW learning takes a long time.
 
 \section{Grid World results}
-Grid world is a world where a blind agent (never given any observation) in a 4x4 grid needs to reach the bottom right corner, which will grant a reward of 1. All other rewards are 0. Moving outside the grid returns the agent back to the nearest square inside the grid. Once reaching the bottom right corner, the agent is teleported to a random other square in the grid. Note that under the specification, the agent may be teleported to the bottom right corne. The agent will not receive extra reward for this, but has an advantage in that either RIGHT or DOWN will result in an immediate reward. The environment is non-deterministic, however, contains an optimal sequence of moves that is guaranteed a reward within 6 moves, namely RIGHT, DOWN repeated 3 times, which would give an average reward of 0.33. The parameters were chosen such that the agent has enough depth in the CT to store the optimum strategy (depth 12), and will search a reasonable distance in the future (given the small environment).
+Grid World is a world where a blind agent (never given any observation) in a 4x4 grid needs to reach the bottom right corner, which will grant a reward of 1. All other rewards are 0. Moving outside the grid returns the agent back to the nearest square inside the grid. Once reaching the bottom right corner, the agent is teleported to a random other square in the grid. Note that under the specification, the agent may be teleported to the bottom right corne. The agent will not receive extra reward for this, but has an advantage in that either RIGHT or DOWN will result in an immediate reward. The environment is non-deterministic, however, contains an optimal sequence of moves that is guaranteed a reward within 6 moves, namely RIGHT, DOWN repeated 3 times, which would give an average reward of 0.33. The parameters were chosen such that the agent has enough depth in the CT to store the optimum strategy (depth 12), and will search a reasonable distance in the future (given the small environment).
 
 \begin{table}[h]
 \begin{center}
@@ -511,7 +511,7 @@ These parameters are chosen such that the agent has enough depth in the CT to st
  \caption{Grid World results.}
  \label{fig:grid_results}
 \end{figure}
-The results for this experiment are particularly interesting because the graph shows the agent clearly wandering around lost for the first 4000 cycles, but then starting to correctly identify the better strategy, and the reward sharply increases. As shown, the agent strategy has clearly not converged yet and needs more time. The actions taken shows the agent clearly favouring sequences with RIGHT and DOWN, dramatically increasing the average reward. The average reward continues to increase but has not quite reached the optimum yet.
+The results for this experiment are particularly interesting because the graph shows the agent clearly wandering around lost for the first 4000 cycles, but then as the agent starts to correctly identify the better strategy, the reward sharply increases. This creates a snowball effect; better strategies are found from making explorations on good strategies. As shown, the agent strategy has clearly not converged yet and needs more time. The actions taken shows the agent clearly favouring sequences with RIGHT and DOWN, dramatically increasing the average reward. The average reward continues to increase but has not quite reached the optimum yet.
 
 \section{Biased Rock-Paper-Scissors results}
 In Biased Rock-Paper-Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias. The environment is non-deterministic. Note that optimum play on this environment would involve the agent playing scissors until a loss, then playing paper directly afterwards.
