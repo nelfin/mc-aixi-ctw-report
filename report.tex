@@ -113,7 +113,7 @@ The agent can be compile with the \texttt{make} command. The agent then can then
 
 \texttt{<environment>} is a compulsory argument, which specifies the environment configuration file the agent is to use. In this implementation, it is one of the following
 \begin{itemize}
-\item \texttt{coinflip.conf}: Biased Coin Flip enviroment
+\item \texttt{coinflip.conf}: Biased Coin Flip environment
 \item \texttt{grid.conf}: Grid World environment
 \item \texttt{kuhnpoker.conf}: Kuhn Poker environment
 \item \texttt{pacman.conf}: Pacman environment
@@ -153,7 +153,7 @@ In addition to this, some configurations have parameters that are specific to th
     \begin{itemize}
         \item \texttt{environmentN}: Specifies the $N^{\text{th}}$ environment, where $0 \leq N \leq 10$. The value of this parameter is an integer $\leq 10$, and indicates which environment \texttt{environmentN} represents.
         \item \texttt{startN}: Specifies the time step that at which the $N^{\text{th}}$ environment starts, where $0 \leq N \leq 10$.
-        \item Paremeters required for the environemnts $1..N$ specified in \texttt{environment.cpp}.
+        \item Parameters required for the environemnts $1..N$ specified in \texttt{environment.cpp}.
     \end{itemize}
 \end{itemize}
 
@@ -631,7 +631,7 @@ In partially observable Pacman, the agent plays in a maze, getting reward for co
 
 Several assumptions were made on top of the specification.  While under the influence of the power pill, the agent is able to eat ghosts instead. Note that there is no reward given for this, unlike the classic pacman game. Ghosts also do not respawn, differing from traditional pacman. The effect this has is the agent should learn that if it eats a power pill, a good strategy is to try to eat ghosts, which will maximise future reward. However, given the limitations of balancing search size against computational limits, it is unlikely that this will be seen to a large degree.
 
-The rewards were more complicated because the agent can trigger multiple events with one action and thus receive multiple rewards. A reward of -60 was given for running intot a ghost, -10 for a wall, -1 for moving, 10 for eating a pellet and 100 for finishing all pellets. Multiple events had their rewards added together, and 71 was added to the total to ensure the reward remained positive. Ghosts will do a depth first search on possible moves in order to find pacman, and if he is within 5 tiles, they will agressively pursue him for 10 moves, after which they will forget about him for 10 moves. Ghosts do not flee from pacman with a power pill.
+The rewards were more complicated because the agent can trigger multiple events with one action and thus receive multiple rewards. A reward of -60 was given for running into a ghost, -10 for a wall, -1 for moving, 10 for eating a pellet and 100 for finishing all pellets. Multiple events had their rewards added together, and 71 was added to the total to ensure the reward remained positive. Ghosts will do a depth first search on possible moves in order to find pacman, and if he is within 5 tiles, they will aggressively pursue him for 10 moves, after which they will forget about him for 10 moves. Ghosts do not flee from pacman with a power pill.
 
 \begin{table}[h]
 \begin{center}
