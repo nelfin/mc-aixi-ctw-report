@@ -501,7 +501,7 @@ These parameters are chosen such that the agent has enough depth in the CT to st
 %   \caption{Grid world results}
 %   \label{fig:grid_results}
 % \end{figure}
-The results for this experiment are particularly interesting because the graph shows the agent clearly wandering around lost for the first 4000 cycles, but then starting to correctly identify the better strategy, and the reward sharply increases. As shown, the agent strategy has clearly not converged yet and needs more time. The actions taken shows the agent clearly favouring sequences with RIGHT and DOWN, dramatically increasing the average reward. The learning 
+The results for this experiment are particularly interesting because the graph shows the agent clearly wandering around lost for the first 4000 cycles, but then starting to correctly identify the better strategy, and the reward sharply increases. As shown, the agent strategy has clearly not converged yet and needs more time. The actions taken shows the agent clearly favouring sequences with RIGHT and DOWN, dramatically increasing the average reward. The average reward continues to increase by has not quite reached optimum yet.
 
 \section{Biased Rock paper scissors results}
 In Biased Rock Paper Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias. The environment is non-deterministic. Note that optimum play on this environment would involve the agent playing scissors until a loss, then playing paper directly afterwards. \\\\
@@ -532,6 +532,39 @@ The CT depth is chosen such that 2 observation and reward pairs can be stored, w
 \end{figure}
 
 The results show that the agent is initially thrown off by the curious distribution of the environment, actually performing worse than random. While this may seem odd, it must be kept in mind that the CTW will initially perform poorly for non-deterministic sequence prediction as it can be thrown off by chance. If the agent is at a point where it predicts that scissors is the best move, it is more likely to predict that scissors will be the best next move as well. The problem is that the bias of playing two rocks in a row is quite subtle and will take a while to learn the correct paths in the CTW, making it difficult to learn that a loss on scissors must be immediately followed by paper. A sharp learning curve happens in iterations 200-600 as the agent learns how to handle this distribution (by not playing scissors after losing on scissors) and the average reward becomes close to 1 (reward from performing random). However, even after 6000 iterations, the agent still hasn't managed to learn that a loss on scissors should be followed by paper for optimum reward.
+
+
+To provide \mac\ with enough leeway to store sufficient information to model
+the more complicated Markov process in RPS, an extensive simulation with was
+run with the parameters specified as follows:
+\begin{center}
+\begin{tabular}{| r | l | }
+\hline
+mc-simulations & 500\\
+ct-depth & 32\\
+agent-horizon & 4\\
+exploration & 0.001\\
+explore-decay & 0.999999\\
+\hline
+\end{tabular}\\
+\end{center}
+
+This yielded an average reward per cycle that can be seen in
+Figure~\ref{fig:rps_results_ctw}, showing that the agent the agent performs
+better than random play, but still does not achieve the optimal reward of 1.25
+per cycle.
+
+\begin{figure}[h]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+        \addplot table {graph_data/rps2.plot.csv};
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  \caption{Biased RPS results with larger CTW depth}
+  \label{fig:rps_results_ctw}
+\end{figure}
 
 \section{Kuhn Poker results}
 In Kuhn Poker, the agent plays against a Nash Equilibrium AI, with gamma set to 0.5. More details about the environment can be found in Kuhn \cite{kuhn}. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.\\\\
@@ -565,9 +598,9 @@ The CT depth was chosen in order to be slightly more than enough to play optimal
 Kuhn Poker initially performs poorly against the Nash player, losing significantly more often than winning. However, interestingly, within 800 cycles, the agent begins to learns how to play the basic game (such as betting when seeing a king and passing with a jack), seen by the steep improvement which cuts out just above 1.87. Some finer points are learned up to 4000 cycles, possibly such as bluffing with a queen, reaching an average reward of 1.9. However, the agent does not have enough time to start learning how to exploit the Nash player and still loses more times than it wins.
 
 \section{Pacman results}
-In partially observable Pacman, the agent plays in a maze, getting reward for consuming food but losing reward for running into walls and getting eaten by ghosts, according to the classical Pacman game. However, the agent cannot see the entire map, with a 16 bit percept based on 4 bits for line of sight for food, 3  bits for smelling food (based on manhattan distances of 2, 3 and 4), 4 bits for line of sight of ghosts, and finally 1 bit for the power pill.\\\\
+In partially observable Pacman, the agent plays in a maze, getting reward for consuming food but losing reward for running into walls and getting eaten by ghosts, according to the classical Pacman game. However, the agent cannot see the entire map, with a 16 bit percept based on 4 bits for line of sight for food, 3  bits for smelling food (based on manhattan distances of 2, 3 and 4), 4 bits for line of sight of ghosts, and finally 1 bit for the power pill. The environment is non-deterministic because the ghosts move randomly if not chasing pacman, and food is randomly allocated.\\\\
 Several assumptions were made on top of the specification.  While under the influence of the power pill, the agent is able to eat ghosts instead. Note that there is no reward given for this, unlike the classic pacman game. Ghosts also do not respawn, differing from traditional pacman. The effect this has is the agent should learn that if it eats a power pill, a good strategy is to try to eat ghosts, which will maximise future reward. However, given the limitations of balancing search size against computational limits, it is unlikely that this will be seen to a large degree.\\\\
-The rewards were more complicated because the agent can trigger multiple events with one action and thus receive multiple rewards. A reward of -60 was given for running intot a ghost, -10 for a wall, -1 for moving, 10 for eating a pellet and 100 for finishing all pellets. Multiple events had their rewards added together, and 71 was added to the total to ensure the reward remained positive.
+The rewards were more complicated because the agent can trigger multiple events with one action and thus receive multiple rewards. A reward of -60 was given for running intot a ghost, -10 for a wall, -1 for moving, 10 for eating a pellet and 100 for finishing all pellets. Multiple events had their rewards added together, and 71 was added to the total to ensure the reward remained positive. Ghosts will do a depth first search on possible moves in order to find pacman, and if he is within 5 tiles, they will agressively pursue him for 10 moves, after which they will forget about him for 10 moves. Ghosts do not flee from pacman with a power pill.
 \begin{center}
 \begin{tabular}{| r | l | }
 \hline
