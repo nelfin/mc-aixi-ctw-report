@@ -58,7 +58,7 @@ Bottom of the page
   \setcounter{footnote}{0}
   u4669875\footnotemark &
   u4667010\footnotemark &
-  u4669875\footnotemark &
+  u4667844\footnotemark &
   u4850020\footnotemark &
   u4519169\footnotemark
 \end{tabular}
@@ -134,8 +134,90 @@ In addition to this, some configurations have parameters that are specific to th
 \end{itemize}
 
 \chapter{MC-AIXI-CTW Implementation}
+\section{Design Choices}
 \section{Context Tree Weighting}
+The algorithm for implementing context-tree weighting (CTW) mainly consists of the methods and objects given in the file \texttt{predict.cpp}, along with its corresponding \texttt{.hpp} file. We run through these from the beginning of the file to its end.  
 
+\subsection{Objects}
+\begin{itemize}
+\item{\texttt{CTNode}
+
+This object represents a node in the context tree; and so it needs to store both the Laplacian estimate of the probability, along with the weight given to it by the actual CTW algorithm. For mathematical stability, we store these floating-point numbers as logarithms, so we can just add them instead of multiplying them. In addition, it has a 2-array of pointers to its left and right child, and it stores the counts for these nodes in the context of the history (which is also required for the CTW algorithm).
+  }
+\item{\texttt{ContextTree}
+
+Here we have the entire context tree represented as an object, which is a glorified pointer to the root node of the tree (as \texttt{CTNode}s store their own children). In addition to storing the root, \texttt{ContextTree} also stores a double-ended queue of symbols (boolean integers) which represents the current history of the tree, and an unsigned integer which represents the maximum depth of the tree (so that we don't add nodes past the depth, and take up more memory than we want).
+  }
+\end{itemize}
+
+\subsection{Methods}
+\subsubsection{\texttt{CTNode}}
+\begin{itemize}
+\item{\texttt{logProbWeighted, logProbEstimated, visits, child}
+
+    These methods are simply defined. Since the values stored in variables such as \texttt{m_log_prob_weighted} are declared privately, it is required to use a public method to get them. \texttt{visits} grabs the sum of the counts for the child nodes - the number of times that we have seen this particular node in our travels; and \texttt{child} takes a symbol, and returns a pointer to the correct (left or right) child.
+  }
+\item{\texttt{update}
+
+    \texttt{update} is one of the most important methods in the entire CTW implementation. We recurse through the tree, starting from the node that calls this method, popping symbols from the end of the history until we reach a leaf; as in the CTW algorithm. When we do, we update the counts for the leaf based on the symbol that is passed to \texttt{update}, and then follow the branch back up the tree, using the equation given for $P_{w}$: \[ P_{w} = \frac{1}{2}P_{KT}(n) + \frac{1}{2}P^{0}P^{1}. \] % can someone check this against the literature?
+This method doesn't 
+  }
+\item{\texttt{size}
+    
+  }
+\item{\texttt{logKTMul}
+    
+  }
+\item{\texttt{revert}
+    
+  }
+\item{\texttt{prettyPrintNode}
+    
+  }
+\end{itemize}
+\subsubsection{\texttt{ContextTree}}
+\begin{itemize}
+\item{\texttt{clear}
+    
+  }
+\item{\texttt{update}
+
+    This is an overloaded method, which can either take in a symbol, or a list of symbols. If passed a list, it simply runs itself on each of the symbols in turn; and if passed a symbol, it first checks whether we have enough pre-history to generate a tree. If we don't, it simply pushes the symbol to the back of the history (where we can easily access it again), and if we do, then we need to actually change nodes; so we call the \texttt{update} method from \texttt{CTNode} instead, before pushing the symbol onto the history.
+  }
+\item{\texttt{updateHistory}
+    
+  }
+\item{\texttt{revert}
+    
+  }
+\item{\texttt{revertHistory}
+    
+  }
+\item{\texttt{predict}
+
+  }
+\item{\texttt{genRandomSymbols}
+    
+  }
+\item{\texttt{genRandomSymbolsAndUpdate}
+    
+  }
+\item{\texttt{logBlockProbability}
+    
+  }
+\item{\texttt{nthHistorySymbol}
+    
+  }
+\item{\texttt{depth, historySize, size}
+    
+  }
+\item{\texttt{predictNext}
+    
+  }
+\item{\texttt{prettyPrint, prettyPrintNode, printHistory}
+    
+  }
+\end{itemize}
 \section{Upper Confidence Tree}
 
 \section{Revert Function}
