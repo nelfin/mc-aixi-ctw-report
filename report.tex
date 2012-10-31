@@ -525,6 +525,39 @@ The CT depth is chosen such that 2 observation and reward pairs can be stored, w
 \end{figure}
 The results show that the agent is initially thrown off by the curious distribution of the environment, actually performing worse than random. While this may seem odd, it must be kept in mind that the CTW will initially perform poorly for non-deterministic sequence prediction as it can be thrown off by chance. If the agent is at a point where it predicts that scissors is the best move, it is more likely to predict that scissors will be the best next move as well. The problem is that the bias of playing two rocks in a row is quite subtle and will take a while to learn the correct paths in the CTW, making it difficult to learn that a loss on scissors must be immediately followed by paper. A sharp learning curve happens in iterations 200-600 as the agent learns how to handle this distribution (by not playing scissors after losing on scissors) and the average reward becomes close to 1 (reward from performing random). However, even after 6000 iterations, the agent still hasn't managed to learn that a loss on scissors should be followed by paper for optimum reward.
 
+
+To provide \mac\ with enough leeway to store sufficient information to model
+the more complicated Markov process in RPS, an extensive simulation with was
+run with the parameters specified as follows:
+\begin{center}
+\begin{tabular}{| r | l | }
+\hline
+mc-simulations & 500\\
+ct-depth & 32\\
+agent-horizon & 4\\
+exploration & 0.001\\
+explore-decay & 0.999999\\
+\hline
+\end{tabular}\\
+\end{center}
+
+This yielded an average reward per cycle that can be seen in
+Figure~\ref{fig:rps_results_ctw}, showing that the agent the agent performs
+better than random play, but still does not achieve the optimal reward of 1.25
+per cycle.
+
+\begin{figure}[h]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[xlabel=Cycles,ylabel=Average reward,smooth,/pgfplots/no markers]
+        \addplot table {graph_data/rps2.plot.csv};
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  \caption{Biased RPS results with larger CTW depth}
+  \label{fig:rps_results_ctw}
+\end{figure}
+
 \section{Kuhn Poker results}
 In Kuhn Poker, the agent plays against a Nash Equilibrium AI, with gamma set to 0.5. More details about the environment can be found in Kuhn \cite{kuhn}. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.\\\\
 \begin{center}
