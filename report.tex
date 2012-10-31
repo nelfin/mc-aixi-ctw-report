@@ -313,7 +313,7 @@ Most of the Upper Confidence Tree (UCT) algorithm is implemented in the files \t
 	
 	The top level function for determining an action based on an agent's state. \texttt{search} forms the search tree as it searches. Using the \texttt{SearchNode::sample} function, \texttt{search} samples from the root multiple times to form the MCTS (Monte Carlo Tree Search) tree. This function also uses \texttt{ModelUndo} to save an agent before modifying it and it's CTW tree. It can then revert it back to it's previous state before the sampling run took place.
 	
-	After the tree has been explored sufficiently (\texttt{numSimulations}), the best action is determined by taking the maximum expected reward over all of the possible actions. This is best action is the one that search returns.
+	After the tree has been explored sufficiently (\texttt{numSimulations}), the best action is determined by taking the maximum expected reward over all of the possible actions. This best action is the one that search returns.
 }
 	
 \end{itemize}
