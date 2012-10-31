@@ -7,6 +7,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{pgfplots}
 \usepackage[sc]{mathpazo}
 \usepackage[round]{natbib}
 
@@ -34,9 +35,9 @@
 
 
 \begin{tabular}{ccccc}
+  Jarrah Bloomfield\footnotemark &
   Luke English\footnotemark &
   Andrew Haigh\footnotemark &
-  Jarrah Bloomfield\footnotemark &
   Joshua Nelson\footnotemark &
   Anthony Voutas\footnotemark
 \end{tabular}
@@ -135,12 +136,30 @@ In addition to this, some configurations have parameters that are specific to th
 \chapter{MC-AIXI-CTW Implementation}
 \section{Context Tree Weighting}
 
+<<<<<<< Updated upstream
 \section{Upper Confidence Tree}
+=======
+
+\chapter{Upper Confidence Tree}
+>>>>>>> Stashed changes
 
 \section{Revert Function}
 
 \chapter{Experimentation}
 \label{sec:Experimentation}
+
+% This is just a test figure, to see what happens with PGFPlots and such.
+\begin{figure}[h]
+\begin{center}
+  \begin{tikzpicture}
+    \begin{axis}[xlabel=Cycle,ylabel=Average reward,title={Coinflip $p=0.0$}]
+      \pgfplotstableread{plot.csv}\plotcsv
+      \addplot+[every mark/.append style={no markers},smooth] table
+      {\plotcsv};
+    \end{axis}
+  \end{tikzpicture}
+\end{center}
+\end{figure}
 
 \section{Learning}
 \label{sec:Learning}
