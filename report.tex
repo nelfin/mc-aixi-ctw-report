@@ -221,30 +221,144 @@ This method doesn't
 \section{Upper Confidence Tree}
 
 \section{Revert Function}
-
 \chapter{Experimentation}
-\label{sec:Experimentation}
+\section{Sequence prediction}
+\label{sec:Sequence prediction}
+The CTW tree is the primarmy prediction mechanism in the \mac{} model. The CTW implementation of \mac{} was tested in isolation from the rest of the agent on a range of deterministic and non-deterministic sequence. This was useful for debugging purposes, and the results are an interesting biproduct of \mac{}.
+\subsection{Deterministic sequence prediction}
+Several simple sequences were given to the CTW tree, and the CTW tree was asked to continue the sequence. This can be seen in Figure \ref{tab:det_seq_pred}. We can see that the CTW tree is able to correctly predict the next bit, or multiple bits, in the sequence.
 
-% This is just a test figure, to see what happens with PGFPlots and such.
-\begin{figure}[h]
-\begin{center}
-  \begin{tikzpicture}
-    \begin{axis}[xlabel=Cycle,ylabel=Average reward,title={Coinflip $p=0.0$}]
-      \pgfplotstableread{plot.csv}\plotcsv
-      \addplot+[every mark/.append style={no markers},smooth] table
-      {\plotcsv};
-    \end{axis}
-  \end{tikzpicture}
-\end{center}
+\begin{figure}
+\bcen
+\bgroup
+\def\arraystretch{1.5}
+\begin{tabular}{|cc|cc|}
+\hline
+Sequence & Prediction & Sequence & Prediction\\
+\hline $0^{1000}$ & 0... & $1^{1000}$ & 1...\\ 
+\hline $(01)^{1000}$ & 01... & $(10)^{1000}$ & 10...\\ 
+\hline $(0110)^{500}$ & 0110... & $(1100)^{500}$ & 1100...\\ 
+\hline $(110)^{500}$ & 110... & $(001)^{500}$ & 001...\\
+\hline 
+\end{tabular} 
+\egroup
+\ecen
+\caption{Some of the sequences given to the CTW tree, and the prediction of the next symbol.}
+\label{tab:det_seq_pred}
 \end{figure}
 
-\section{Learning}
-\label{sec:Learning}
-\subsection{Sequence prediction}
-The CTW tree is the primarmy prediction mechanism in the \mac{} model. The CTW implementation of \mac{} was tested in isolation from the rest of the agent on a range of deterministic and non-deterministic sequence.
+\subsection{Non deterministic sequence prediction}
+A partially non deterministic sequence was given to CTW for testing purposes. The sequence was given to CTW was of the form\\
+\[
+S := x^{\text{obs}}_0,\; x^{\text{rew}}_0,\; x^{\text{act}}_1,\; x^{\text{obs}}_1,\; x^{\text{rew}}_1, x^{\text{act}}_2,\; x^{\text{obs}}_2,\; x^{\text{rew}}_2, ...
+\]
+Where\\
+\[
+x^{\text{act}}_i := r_{\text{act}}, \;\;\;\; x^{\text{obs}}_i := r_{\text{obs}}, \;\;\;\; \text{and} \;\;\;\;
+x^{\text{rew}}_i :=
+\begin{cases}
+0 & \text{if } x^{\text{obs}}_i = x^{\text{act}}_i\\
+1 & \text{if } x^{\text{obs}}_i \not= x^{\text{act}}_i
+\end{cases}
+\]
+Where\\
+\[
+r_\text{act}, r_\text{obs} \text{ are random bits }
+\]
 
-\section{Extension}
-\label{sec:Extension}
+The idea of this sequence $S$ is to simulate a coinflip environment history sequence. The random bits $x^{\text{obs}}_i$ and $x^{\text{act}}_i$ simulate random coin flips, and the reward bit $x^{\text{act}}_i$ compares them. The action bit $x^{\text{act}}_i$ is random in this sequence.
+
+A sequence of this type with size ~9000 (3000 iterations) is given to the CTW tree, up to the point
+\[
+S = x^{\text{obs}}_0,\; x^{\text{rew}}_0,\; x^{\text{act}}_1,\;\;\;...\;\;\;,x^{\text{act}}_{3000},\;x^{\text{obs}}_{3000}
+\]
+
+The CTW tree is then asked to predict which bit is the next in the sequence. The idea of this experiment is to determine if the CTW tree ``understands'' the rules of the game - if it understood, it would predict $x^{\text{rew}}_{3000} = (x^{\text{act}}_{3000} \land x^{\text{obs}}_{3000}) \lor (\lnot x^{\text{act}}_{3000} \land \lnot x^{\text{obs}}_{3000})$.
+
+The results of this experiment are show in Figure \ref{tab:non_det_seq_pred}. We see that it correctly predicts the reward bit given the action and observation bits. This provides some verification that the implementation of the CTW tree is correct.
+\begin{figure}
+\bcen
+\bgroup
+\def\arraystretch{1.5}
+\begin{tabular}{c |c| c }
+ • & $x^{\text{rew}}_{3000} = 0$ & $x^{\text{rew}}_{3000} = 1$ \\ 
+\hline $x^{\text{rew}}_{3000} = 0$ & 1 & 0 \\ 
+\hline $x^{\text{rew}}_{3000} = 1$ & 0 & 1 \\  
+\end{tabular}
+\egroup
+\ecen
+\caption{Predicted values for $x^{\text{rew}}_{3000}$}
+\label{tab:non_det_seq_pred}
+\end{figure}
+
+\section{Coin flip results}
+Coin flip is a simple environment where the agent is given a reward of 1 for correctly guessing the next bit, where the next bit is random with a certain bias such that the next bit is one with probability $\theta \in [0,1]$, else the reward is 0.
+\section{Tiger results}
+The parameters used were:\\\\
+\begin{tabular}{| r | l | }
+\hline
+mc-simulations & 50\\
+exploration & 0.01\\
+explore-decay & 0.999\\
+\hline
+\end{tabular}
+\section{Grid world results}
+
+\begin{tabular}{| r | l | }
+\hline
+mc-simulations & 50\\
+exploration & 0.01\\
+explore-decay & 0.99999\\
+\hline
+\end{tabular}
+\section{Biased Rock paper scissors results}
+In Biased Rock Paper Scissors (RPS), the agent plays against an environment which will randomly select rock, paper or scissors; but after winning with rock, the environment will repeat a rock move. This is interesting because it creates a bias in the environment's distribution, and the agent needs to try to exploit this bias.\\\\
+The parameters used were:\\\\
+\begin{tabular}{| r | l | }
+\hline
+mc-simulations & 50\\
+exploration & 0.1\\
+explore-decay & 0.999\\
+\hline
+\end{tabular}
+\section{Kuhn Poker results}
+In Kuhn Poker, the agent plays against a Nash Equillibruim AI, with gamma set to 0.5. The agent is given a reward of 0 for a loss, 2 for a win or 1 if no showdown has occurred so far.\\\\
+The parameters used were:\\\\
+\begin{tabular}{| r | l | }
+\hline
+mc-simulations & 50\\
+exploration & 0.01\\
+explore-decay & 0.9999\\
+\hline
+\end{tabular}
+\section{Pacman results}
+In Pacman\\\\
+The parameters used were:\\\\
+\begin{tabular}{| r | l | }
+\hline
+mc-simulations & 50\\
+exploration & 0.01\\
+explore-decay & 0.99999\\
+\hline
+\end{tabular}
+
+ \begin{center}
+\emph{Table 5.1 Number of problems where complete solutions were found}
+\end{center}
+The parameters used were:
+\chapter{Extension}
+% This is just a test figure, to see what happens with PGFPlots and such.
+%\begin{figure}[h]
+%\begin{center}
+%  \begin{tikzpicture}
+%    \begin{axis}[xlabel=Cycle,ylabel=Average reward,title={Coinflip $p=0.0$}]
+%      \pgfplotstableread{plot.csv}\plotcsv
+%      \addplot+[every mark/.append style={no markers},smooth] table
+%      {\plotcsv};
+%    \end{axis}
+%  \end{tikzpicture}
+%\end{center}
+%\end{figure}
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
