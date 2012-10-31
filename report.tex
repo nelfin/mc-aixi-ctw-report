@@ -234,8 +234,43 @@ This method doesn't change the history, as we push the popped symbols back onto 
   }
 \end{itemize}
 \section{Upper Confidence Tree}
+Most of the Upper Confidence Tree (UCT) algorithm is implemented in the files \texttt{search.cpp}. The UCT algorithm assumes we have some model of the environment (CTW) and searches this model for the best action.
+\subsection{Objects}
+\begin{itemize}
+	\item{\texttt{SearchNode}
+	
+	This object represents a node in the search tree. The \texttt{SearchNodes} form an expectimax tree, alternating between decision and chance nodes. \texttt{SearchNode} contains most of the methods related to traversing this tree, and calculating optimal actions from it.
+	}
+\end{itemize}
+\subsection{Methods}
+\begin{itemize}
+\subsubsection*{\texttt{SearchNode}}
+	\item{\texttt{selectAction}
+	
+	Determines the next action to play, starting from this search node. \texttt{selectAction} looks through the possible actions it could take from this point, and chooses the action that would yield the best expected score (based on the sampling this node in the \texttt{sample} function). Included in this expected score is the \texttt{ucb\_bound} variable, which gives a bonus to nodes that have not been well explored.
+	}
+	
+	\item{\texttt{sample}
+	
+	Performs a trial run through this node, and through it's children. \texttt{sample} calculates the expected reward along the way, which updates the expected score (\texttt{m\_mean}) value for \texttt{selectAction}. This function generates actions to take as it travels down the tree using the CTW tree (\texttt{agent::genPerceptAndUpdate} and \texttt{agent::modelUpdate}).
+	
+	If \texttt{SearchNode} is a chance node, it generates an observation and reward from the CTW tree, and continues down through \texttt{SearchNode}'s children. If it is a decision node, it uses \texttt{SelectAction} to choose an action. On the first visit, it uses the \texttt{playout} function to determine a reward.
+	}
+	
+	\item{\texttt{playout}
+	
+	Generates actions randomly, and updates the CTW tree based on them. Used in the first run through of the \texttt{sample} function. 
+	}
+\subsubsection{General functions}
+\item{\texttt{search}
+	
+	The top level function for determining an action based on an agent's state. \texttt{search} forms the search tree as it searches. Using the \texttt{SearchNode::sample} function,
+	}
+	
+\end{itemize}
+\subsubsection{\texttt{ModelUndo}}
 
-\section{Revert Function}
+
 \chapter{Experimentation}
 \section{Sequence prediction}
 \label{sec:Sequence prediction}
@@ -328,6 +363,7 @@ Coin flip is a simple environment where the agent is given a reward of 1 for cor
   \caption{Coin flip results}
   \label{fig:coinflip_results}
 \end{figure}
+Another graph with $\theta = 1$ is shown in Figure \ref{fig:coin_1_0}. With $\theta = 1$, the maximum theoretical reward is $1$, with the strategy of picking 1 always. We can see that our implementation of \mac{} quickly converges to this strategy of picking 1 always, with the average reward approaching 1 (the maximum possible reward).
 
 
 \section{Tiger results}
